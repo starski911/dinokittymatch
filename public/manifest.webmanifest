@@ -1,0 +1,19 @@
+{
+  "name": "Joey & Alina's Super Match",
+  "short_name": "Super Match",
+  "description": "Fun two-player memory card matching game for Joey & Alina!",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#38bdf8",
+  "theme_color": "#38bdf8",
+  "categories": ["games", "kids"],
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+<circle cx="50" cy="50" r="43" fill="#fef08a" stroke="#1e1b4b" stroke-width="3"/>
+<!-- Back Spikes -->
+<polygon points="34,28 24,22 33,35" fill="#fb923c" stroke="#1e1b4b" stroke-width="2.5" stroke-linejoin="round"/>
+<polygon points="32,38 22,35 32,45" fill="#fb923c" stroke="#1e1b4b" stroke-width="2.5" stroke-linejoin="round"/>
+<!-- Feet -->
+<path d="M36 70 L36 84 M56 70 L56 84" stroke="#1e1b4b" stroke-width="8" stroke-linecap="round"/>
+<path d="M36 70 L36 84 M56 70 L56 84" stroke="#4ade80" stroke-width="4" stroke-linecap="round"/>
+<!-- Dino Body & Big Head -->
+<path d="M20 58 Q14 44 28 42 L40 42 L43 22 Q66 15 78 29 Q82 41 66 45 L56 45 L61 66 Q45 77 27 66 Z" fill="#4ade80" stroke="#1e1b4b" stroke-width="3.5" stroke-linejoin="round"/>
+<!-- Belly & Little Arm -->
+<path d="M52 48 Q58 56 52 65" stroke="#bbf7d0" stroke-width="5" fill="none" stroke-linecap="round"/>
+<path d="M62 50 L70 52" stroke="#1e1b4b" stroke-width="3.5" stroke-linecap="round"/>
+<!-- Big Cartoon Eye & Rosy Cheek -->
+<circle cx="62" cy="29" r="6" fill="#ffffff" stroke="#1e1b4b" stroke-width="2.5"/>
+<circle cx="63.5" cy="29" r="3" fill="#1e1b4b"/>
+<circle cx="64.5" cy="27.5" r="1.2" fill="#ffffff"/>
+<circle cx="55" cy="36" r="3.5" fill="#fb7185" opacity="0.8"/>
+<!-- Happy Grin & Little Tooth -->
+<path d="M62 39 Q70 42 76 37" stroke="#1e1b4b" stroke-width="2.8" fill="none" stroke-linecap="round"/>
+<polygon points="69,39 71,43 73,38.5" fill="#ffffff" stroke="#1e1b4b" stroke-width="1.5"/>
+        </svg>

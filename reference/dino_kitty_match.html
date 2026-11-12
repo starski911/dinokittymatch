@@ -1,0 +1,2536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#38bdf8" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Super Match" />
+  <link id="pwa-manifest-link" rel="manifest" href="" />
+  <link id="apple-touch-icon-link" rel="apple-touch-icon" href="" />
+  <title>Joey &amp; Alina's Super Match</title>
+
+  <!-- Google Fonts: Titan One & Fredoka for chunky cartoon headers & Nunito for crisp readability -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Nunito:wght@700;800;900&family=Titan+One&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    :root {
+      --font-cartoon: 'Titan One', 'Fredoka', cursive, sans-serif;
+      --font-display: 'Fredoka', cursive, sans-serif;
+      --font-body: 'Nunito', sans-serif;
+      --ink: #1e1b4b;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    input {
+      user-select: text;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: linear-gradient(180deg, #38bdf8 0%, #7dd3fc 42%, #fef08a 78%, #fbcfe8 100%);
+      min-height: 100dvh;
+      overflow-x: hidden;
+      margin: 0;
+      padding: 0;
+      position: relative;
+    }
+
+    h1, h2, h3, .font-display {
+      font-family: var(--font-display);
+    }
+
+    .font-cartoon {
+      font-family: var(--font-cartoon);
+      letter-spacing: 0.03em;
+    }
+
+    /* Bold Saturday-Morning Cartoon Ink Borders & Hard Drop Shadows */
+    .cartoon-box {
+      border: 3.5px solid var(--ink);
+      box-shadow: 0 6px 0 var(--ink);
+    }
+
+    .cartoon-box-sm {
+      border: 3px solid var(--ink);
+      box-shadow: 0 4px 0 var(--ink);
+    }
+
+    .cartoon-pill {
+      border: 3px solid var(--ink);
+      box-shadow: 0 3px 0 var(--ink);
+    }
+
+    .cartoon-title-stroke {
+      -webkit-text-stroke: 2px var(--ink);
+      paint-order: stroke fill;
+      text-shadow: 0 4px 0 var(--ink);
+    }
+
+    /* Animated Cartoon Sky Scenery */
+    @keyframes driftCloudSlow {
+      0% { transform: translateX(-25vw); }
+      100% { transform: translateX(115vw); }
+    }
+    @keyframes driftCloudFast {
+      0% { transform: translateX(115vw); }
+      100% { transform: translateX(-30vw); }
+    }
+    @keyframes twinkleStar {
+      0%, 100% { transform: scale(0.85) rotate(0deg); opacity: 0.75; }
+      50% { transform: scale(1.2) rotate(18deg); opacity: 1; }
+    }
+    @keyframes sunSpin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .cloud-drift-1 {
+      animation: driftCloudSlow 38s linear infinite;
+    }
+    .cloud-drift-2 {
+      animation: driftCloudFast 46s linear infinite;
+    }
+    .star-twinkle {
+      animation: twinkleStar 2.6s ease-in-out infinite;
+    }
+    .sun-rays-spin {
+      transform-origin: center;
+      animation: sunSpin 28s linear infinite;
+    }
+
+    /* 3D Card Flip Mechanics */
+    .perspective-1000 {
+      perspective: 1000px;
+    }
+
+    .card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transform-style: preserve-3d;
+    }
+
+    .card-flipped .card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .card-face {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      border-radius: 1.15rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border: 3.5px solid var(--ink);
+      box-shadow: 0 5px 0 var(--ink);
+    }
+
+    /* Rainbow Polka-Dot Cartoon Card Back */
+    .card-back {
+      background-color: #7c3aed;
+      background-image:
+        radial-gradient(circle at 22% 22%, rgba(255,255,255,0.28) 4px, transparent 5px),
+        radial-gradient(circle at 78% 28%, rgba(250,204,21,0.35) 5px, transparent 6px),
+        radial-gradient(circle at 25% 76%, rgba(56,189,248,0.35) 5px, transparent 6px),
+        radial-gradient(circle at 76% 78%, rgba(244,114,182,0.35) 4px, transparent 5px),
+        linear-gradient(145deg, #6366f1 0%, #9333ea 52%, #ec4899 100%);
+      overflow: hidden;
+    }
+
+    .card-back::before {
+      content: '';
+      position: absolute;
+      top: 4px;
+      left: 8%;
+      right: 8%;
+      height: 28%;
+      border-radius: 999px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0) 100%);
+      pointer-events: none;
+    }
+
+    .card-front {
+      transform: rotateY(180deg);
+      background: #ffffff;
+      overflow: hidden;
+    }
+
+    .card-front::before {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 10%;
+      right: 10%;
+      height: 22%;
+      border-radius: 999px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.75) 0%, rgba(255,255,255,0) 100%);
+      pointer-events: none;
+    }
+
+    /* Electric Sky-Blue & Bubblegum Hot-Pink Cartoon Card Fronts */
+    .card-theme-blue {
+      background: linear-gradient(180deg, #bae6fd 0%, #e0f2fe 45%, #7dd3fc 100%);
+      box-shadow: 0 5px 0 var(--ink), inset 0 0 0 3px #0284c7;
+    }
+
+    .card-theme-pink {
+      background: linear-gradient(180deg, #fbcfe8 0%, #fdf2f8 45%, #f9a8d4 100%);
+      box-shadow: 0 5px 0 var(--ink), inset 0 0 0 3px #db2777;
+    }
+
+    /* Matched state animations */
+    .card-matched .card-front {
+      animation: matchPop 0.52s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    @keyframes matchPop {
+      0% { transform: rotateY(180deg) scale(1); }
+      45% { transform: rotateY(180deg) scale(1.13) rotate(-3deg); }
+      75% { transform: rotateY(180deg) scale(0.95) rotate(2deg); }
+      100% { transform: rotateY(180deg) scale(0.97) rotate(0deg); }
+    }
+
+    /* Comic-book Starburst Score Popups */
+    @keyframes comicBurst {
+      0% {
+        opacity: 0;
+        transform: translate(-50%, 10px) scale(0.3) rotate(-14deg);
+      }
+      22% {
+        opacity: 1;
+        transform: translate(-50%, -18px) scale(1.25) rotate(6deg);
+      }
+      40% {
+        transform: translate(-50%, -26px) scale(1.08) rotate(-3deg);
+      }
+      80% {
+        opacity: 1;
+        transform: translate(-50%, -52px) scale(1.02) rotate(0deg);
+      }
+      100% {
+        opacity: 0;
+        transform: translate(-50%, -76px) scale(0.85);
+      }
+    }
+
+    .floating-badge {
+      animation: comicBurst 1.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      pointer-events: none;
+      z-index: 60;
+      border: 3.5px solid var(--ink);
+      box-shadow: 0 5px 0 var(--ink);
+    }
+
+    /* Squishy Cartoon 3D Buttons */
+    .btn-chunky {
+      border: 3.5px solid var(--ink);
+      box-shadow: 0 6px 0 var(--ink);
+      transition: transform 0.12s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.12s ease;
+    }
+    .btn-chunky:active {
+      transform: translateY(4px);
+      box-shadow: 0 2px 0 var(--ink);
+    }
+
+    /* Active Player Glow Ring & Bounce */
+    .active-boy-glow {
+      box-shadow: 0 0 0 4px #facc15, 0 7px 0 var(--ink);
+      transform: scale(1.04) translateY(-2px);
+    }
+
+    .active-girl-glow {
+      box-shadow: 0 0 0 4px #facc15, 0 7px 0 var(--ink);
+      transform: scale(1.04) translateY(-2px);
+    }
+
+    @keyframes avatarWiggle {
+      0%, 100% { transform: rotate(-4deg) scale(1.03); }
+      50% { transform: rotate(4deg) scale(1.08); }
+    }
+    .active-avatar-bounce {
+      animation: avatarWiggle 1.2s ease-in-out infinite;
+    }
+
+    /* Sleepy floating stars for Time's Up screen */
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px) rotate(-4deg); }
+      50% { transform: translateY(-10px) rotate(6deg); }
+    }
+    .animate-float-slow {
+      animation: floatSlow 3.5s ease-in-out infinite;
+    }
+
+    /* Hold progress bar on secret Mum lock */
+    @keyframes fillHold {
+      from { width: 0%; }
+      to { width: 100%; }
+    }
+    .holding-bar {
+      animation: fillHold 2.5s linear forwards;
+    }
+  </style>
+</head>
+<body class="text-[#1e1b4b] flex flex-col min-h-[100dvh]">
+
+  <!-- ==================== ANIMATED CARTOON WORLD BACKGROUND ==================== -->
+  <div class="fixed inset-0 pointer-events-none overflow-hidden z-0" aria-hidden="true">
+    <!-- Top-Left Smiling Cartoon Sun -->
+    <svg class="absolute -top-8 -left-8 w-36 h-36 sm:w-44 sm:h-44 opacity-95" viewBox="0 0 160 160">
+      <g class="sun-rays-spin">
+        <polygon points="80,6 88,28 72,28" fill="#facc15" stroke="#1e1b4b" stroke-width="3.5" stroke-linejoin="round"/>
+        <polygon points="80,154 88,132 72,132" fill="#facc15" stroke="#1e1b4b" stroke-width="3.5" stroke-linejoin="round"/>
+        <polygon points="6,80 28,88 28,72" fill="#facc15" stroke="#1e1b4b" stroke-width="3.5" stroke-linejoin="round"/>
+        <polygon points="154,80 132,88 132,72" fill="#facc15" stroke="#1e1b4b" stroke-width="3.5" stroke-linejoin="round"/>
+        <polygon points="26,26 46,36 36,46" fill="#fb923c" stroke="#1e1b4b" stroke-width="3.5" stroke-linejoin="round"/>
+        <polygon points="134,134 114,124 124,114" fill="#fb923c" stroke="#1e1b4b" stroke-width="3.5" stroke-linejoin="round"/>
+        <polygon points="134,26 124,46 114,36" fill="#fb923c" stroke="#1e1b4b" stroke-width="3.5" stroke-linejoin="round"/>
+        <polygon points="26,134 36,114 46,124" fill="#fb923c" stroke="#1e1b4b" stroke-width="3.5" stroke-linejoin="round"/>
+      </g>
+      <circle cx="80" cy="80" r="42" fill="#fde047" stroke="#1e1b4b" stroke-width="4"/>
+      <circle cx="67" cy="74" r="4.5" fill="#1e1b4b"/>
+      <circle cx="93" cy="74" r="4.5" fill="#1e1b4b"/>
+      <circle cx="60" cy="84" r="5.5" fill="#fb7185" opacity="0.75"/>
+      <circle cx="100" cy="84" r="5.5" fill="#fb7185" opacity="0.75"/>
+      <path d="M68 88 Q80 100 92 88" stroke="#1e1b4b" stroke-width="4" fill="none" stroke-linecap="round"/>
+    </svg>
+
+    <!-- Pastel Rainbow Arc -->
+    <svg class="absolute top-12 right-[-40px] w-72 h-40 sm:w-96 sm:h-52 opacity-75" viewBox="0 0 320 180">
+      <path d="M20 170 A140 140 0 0 1 300 170" fill="none" stroke="#f43f5e" stroke-width="14" stroke-linecap="round"/>
+      <path d="M34 170 A126 126 0 0 1 286 170" fill="none" stroke="#fb923c" stroke-width="14" stroke-linecap="round"/>
+      <path d="M48 170 A112 112 0 0 1 272 170" fill="none" stroke="#facc15" stroke-width="14" stroke-linecap="round"/>
+      <path d="M62 170 A98 98 0 0 1 258 170" fill="none" stroke="#4ade80" stroke-width="14" stroke-linecap="round"/>
+      <path d="M76 170 A84 84 0 0 1 244 170" fill="none" stroke="#38bdf8" stroke-width="14" stroke-linecap="round"/>
+    </svg>
+
+    <!-- Drifting Puffy Cartoon Cloud 1 -->
+    <svg class="cloud-drift-1 absolute top-14 left-0 w-32 h-20 opacity-95" viewBox="0 0 160 95">
+      <path d="M35 76 H125 A22 22 0 0 0 123 33 A28 28 0 0 0 70 25 A24 24 0 0 0 33 44 A18 18 0 0 0 35 76 Z"
+        fill="#ffffff" stroke="#1e1b4b" stroke-width="4" stroke-linejoin="round"/>
+    </svg>
+
+    <!-- Drifting Puffy Cartoon Cloud 2 -->
+    <svg class="cloud-drift-2 absolute top-36 left-0 w-28 h-16 opacity-90" viewBox="0 0 160 95">
+      <path d="M35 76 H125 A22 22 0 0 0 123 33 A28 28 0 0 0 70 25 A24 24 0 0 0 33 44 A18 18 0 0 0 35 76 Z"
+        fill="#ffffff" stroke="#1e1b4b" stroke-width="4" stroke-linejoin="round"/>
+    </svg>
+
+    <!-- Twinkling 4-Point Cartoon Stars -->
+    <svg class="star-twinkle absolute top-24 left-[28%] w-7 h-7" viewBox="0 0 40 40">
+      <polygon points="20,2 25,15 38,20 25,25 20,38 15,25 2,20 15,15" fill="#fde047" stroke="#1e1b4b" stroke-width="3" stroke-linejoin="round"/>
+    </svg>
+    <svg class="star-twinkle absolute top-44 right-[14%] w-6 h-6" style="animation-delay: 1.1s" viewBox="0 0 40 40">
+      <polygon points="20,2 25,15 38,20 25,25 20,38 15,25 2,20 15,15" fill="#f472b6" stroke="#1e1b4b" stroke-width="3" stroke-linejoin="round"/>
+    </svg>
+
+    <!-- Rolling Green & Mint Cartoon Hills at Bottom -->
+    <svg class="absolute bottom-0 left-0 w-full h-28 sm:h-36" viewBox="0 0 1440 220" preserveAspectRatio="none">
+      <path d="M0,110 Q360,20 760,115 T1440,85 L1440,220 L0,220 Z" fill="#34d399" stroke="#1e1b4b" stroke-width="6"/>
+      <path d="M0,145 Q440,215 920,130 T1440,155 L1440,220 L0,220 Z" fill="#4ade80" stroke="#1e1b4b" stroke-width="6"/>
+    </svg>
+  </div>
+
+  <!-- Confetti Canvas Overlay -->
+  <canvas id="confetti-canvas" class="fixed inset-0 pointer-events-none z-50"></canvas>
+
+  <!-- Toast / Message Banner (replaces any alert/confirm) -->
+  <div id="toast-container" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-2 pointer-events-none w-[90%] max-w-sm"></div>
+
+  <!-- Top App Bar -->
+  <header class="w-full max-w-2xl mx-auto px-3 pt-3 pb-1 flex items-center justify-between gap-2 z-20 relative">
+    <!-- Home / Setup Button -->
+    <button id="btn-home" onclick="App.goHome()" class="btn-chunky bg-amber-300 hover:bg-amber-200 text-[#1e1b4b] font-display font-bold px-3.5 py-2 rounded-2xl text-sm flex items-center gap-1.5">
+      <span class="text-lg">🏠</span>
+      <span class="hidden sm:inline">Menu</span>
+    </button>
+
+    <!-- Game Title & Credit Pill -->
+    <div class="flex flex-col items-center">
+      <div id="header-timer-badge" class="cartoon-pill flex items-center gap-1.5 bg-white px-3.5 py-1 rounded-full transition-colors">
+        <span class="text-xs font-black uppercase tracking-wider text-indigo-700" id="header-credits-pill">⏱️ Time Left: 10:00</span>
+      </div>
+    </div>
+
+    <!-- Secret Mum Lock Button (Tap to open Passcode or Hold 2.5s) -->
+    <button id="btn-mum-lock" aria-label="Parent Controls"
+      class="cartoon-pill relative overflow-hidden bg-white hover:bg-amber-100 text-[#1e1b4b] p-2.5 rounded-2xl transition active:translate-y-0.5 flex items-center gap-1">
+      <div id="mum-hold-progress" class="hidden absolute left-0 top-0 bottom-0 bg-indigo-200/70 pointer-events-none"></div>
+      <svg class="w-5 h-5 relative z-10" fill="none" stroke="currentColor" stroke-width="2.6" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+      </svg>
+      <span class="text-xs font-black relative z-10 hidden sm:inline">Mum</span>
+    </button>
+  </header>
+
+  <!-- Main Content Area -->
+  <main class="flex-1 w-full max-w-2xl mx-auto px-3 pb-6 flex flex-col justify-between relative z-10">
+
+    <!-- ==================== VIEW 1: SETUP / LOBBY ==================== -->
+    <section id="view-setup" class="flex-1 flex flex-col justify-center gap-3.5 py-1">
+      <!-- Hero Banner -->
+      <div class="text-center">
+        <div class="cartoon-pill inline-flex items-center gap-2 bg-amber-300 px-4 py-1 rounded-full mb-1.5 -rotate-1">
+          <span class="text-lg">🦖</span>
+          <span class="text-xs font-black tracking-wide text-[#1e1b4b] uppercase">Kids Memory Adventure</span>
+          <span class="text-lg">🎀</span>
+        </div>
+        <h1 class="font-cartoon text-4xl sm:text-5xl text-amber-300 cartoon-title-stroke tracking-wide">
+          SUPER MATCH!
+        </h1>
+        <div class="cartoon-pill inline-block bg-white/95 px-3 py-1 rounded-full mt-1.5">
+          <p class="text-[11px] sm:text-xs font-black text-[#1e1b4b]">
+            Your Pair = <span class="text-amber-600">+4</span> •
+            Other Pair = <span class="text-emerald-600">+3</span> •
+            Your Color = <span class="text-blue-600">+2</span> •
+            Other = <span class="text-pink-600">+1</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Player Profile Cards (Joey & Alina) -->
+      <div class="grid grid-cols-2 gap-3 pt-1">
+        <!-- Boy Card (Joey) -->
+        <div class="cartoon-box bg-gradient-to-b from-sky-300 to-blue-400 rounded-3xl p-3 flex flex-col items-center relative">
+          <span class="cartoon-pill absolute -top-3.5 bg-blue-600 text-white text-[11px] font-black px-3 py-0.5 rounded-full uppercase tracking-wider">🔵 Blue Team</span>
+          <button onclick="App.openCameraModal('boy')" class="mt-2 relative group focus:outline-none">
+            <div id="setup-avatar-boy" class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-white border-4 border-[#1e1b4b] shadow-md overflow-hidden flex items-center justify-center">
+              <!-- Populated by JS -->
+            </div>
+            <span class="cartoon-pill absolute -bottom-1 -right-1 bg-amber-300 text-[#1e1b4b] p-1.5 rounded-full text-xs group-hover:scale-110 transition">
+              📷
+            </span>
+          </button>
+          <input id="input-name-boy" type="text" maxlength="14" value="Joey"
+            onchange="App.updatePlayerName('boy', this.value)"
+            oninput="App.updatePlayerName('boy', this.value)"
+            aria-label="Boy Player Name"
+            class="cartoon-pill mt-2.5 w-full text-center font-display font-bold text-lg text-[#1e1b4b] bg-white focus:bg-amber-50 rounded-2xl py-1 px-2 outline-none" />
+          <div class="mt-1.5 bg-white/90 px-2.5 py-0.5 rounded-full border-2 border-[#1e1b4b] text-[11px] font-black text-[#1e1b4b] flex items-center gap-1">
+            <span>⭐ Stars:</span>
+            <span id="lifetime-boy">0</span>
+          </div>
+        </div>
+
+        <!-- Girl Card (Alina) -->
+        <div class="cartoon-box bg-gradient-to-b from-pink-300 to-rose-400 rounded-3xl p-3 flex flex-col items-center relative">
+          <span class="cartoon-pill absolute -top-3.5 bg-pink-600 text-white text-[11px] font-black px-3 py-0.5 rounded-full uppercase tracking-wider">🩷 Pink Team</span>
+          <button onclick="App.openCameraModal('girl')" class="mt-2 relative group focus:outline-none">
+            <div id="setup-avatar-girl" class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-white border-4 border-[#1e1b4b] shadow-md overflow-hidden flex items-center justify-center">
+              <!-- Populated by JS -->
+            </div>
+            <span class="cartoon-pill absolute -bottom-1 -right-1 bg-amber-300 text-[#1e1b4b] p-1.5 rounded-full text-xs group-hover:scale-110 transition">
+              📷
+            </span>
+          </button>
+          <input id="input-name-girl" type="text" maxlength="14" value="Alina"
+            onchange="App.updatePlayerName('girl', this.value)"
+            oninput="App.updatePlayerName('girl', this.value)"
+            aria-label="Girl Player Name"
+            class="cartoon-pill mt-2.5 w-full text-center font-display font-bold text-lg text-[#1e1b4b] bg-white focus:bg-amber-50 rounded-2xl py-1 px-2 outline-none" />
+          <div class="mt-1.5 bg-white/90 px-2.5 py-0.5 rounded-full border-2 border-[#1e1b4b] text-[11px] font-black text-[#1e1b4b] flex items-center gap-1">
+            <span>⭐ Stars:</span>
+            <span id="lifetime-girl">0</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Game Options Panel -->
+      <div class="cartoon-box bg-white rounded-3xl p-3.5 flex flex-col gap-3">
+        <!-- Players Mode -->
+        <div>
+          <label class="block text-xs font-black uppercase tracking-wider text-indigo-900 mb-1.5">🎮 Who is Playing?</label>
+          <div class="grid grid-cols-3 gap-2">
+            <button onclick="App.setMode('2p')" data-mode="2p" class="mode-btn py-2 px-2 rounded-2xl font-display font-bold text-xs sm:text-sm transition">
+              👫 Together
+            </button>
+            <button onclick="App.setMode('boy')" data-mode="boy" class="mode-btn py-2 px-2 rounded-2xl font-display font-bold text-xs sm:text-sm transition">
+              👦 <span class="label-boy-name">Joey</span> Solo
+            </button>
+            <button onclick="App.setMode('girl')" data-mode="girl" class="mode-btn py-2 px-2 rounded-2xl font-display font-bold text-xs sm:text-sm transition">
+              👧 <span class="label-girl-name">Alina</span> Solo
+            </button>
+          </div>
+        </div>
+
+        <!-- Difficulty Level -->
+        <div>
+          <label class="block text-xs font-black uppercase tracking-wider text-indigo-900 mb-1.5">🧩 Board Size</label>
+          <div class="grid grid-cols-4 gap-1.5">
+            <button onclick="App.setDifficulty('easy')" data-diff="easy" class="diff-btn py-2 px-1 rounded-2xl font-display font-bold text-xs transition">
+              🐣 Easy (8)
+            </button>
+            <button onclick="App.setDifficulty('medium')" data-diff="medium" class="diff-btn py-2 px-1 rounded-2xl font-display font-bold text-xs transition">
+              🌟 Med (12)
+            </button>
+            <button onclick="App.setDifficulty('hard')" data-diff="hard" class="diff-btn py-2 px-1 rounded-2xl font-display font-bold text-xs transition">
+              🚀 Hard (16)
+            </button>
+            <button onclick="App.setDifficulty('super')" data-diff="super" class="diff-btn py-2 px-1 rounded-2xl font-display font-bold text-xs transition">
+              👑 Super (20)
+            </button>
+          </div>
+        </div>
+
+        <!-- Theme Deck Filter -->
+        <div>
+          <label class="block text-xs font-black uppercase tracking-wider text-indigo-900 mb-1.5">🃏 Card Deck</label>
+          <div class="grid grid-cols-3 gap-2">
+            <button onclick="App.setDeckFilter('mixed')" data-deck="mixed" class="deck-btn py-2 px-2 rounded-2xl font-display font-bold text-xs sm:text-sm transition">
+              🎨 Mixed All
+            </button>
+            <button onclick="App.setDeckFilter('boy')" data-deck="boy" class="deck-btn py-2 px-2 rounded-2xl font-display font-bold text-xs sm:text-sm transition">
+              🦖 <span class="label-boy-name">Joey</span>'s
+            </button>
+            <button onclick="App.setDeckFilter('girl')" data-deck="girl" class="deck-btn py-2 px-2 rounded-2xl font-display font-bold text-xs sm:text-sm transition">
+              🎀 <span class="label-girl-name">Alina</span>'s
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Start Game CTA -->
+      <button onclick="App.startGame()" class="btn-chunky w-full py-4 rounded-3xl bg-gradient-to-r from-lime-400 via-emerald-400 to-teal-400 text-[#1e1b4b] font-cartoon text-2xl sm:text-3xl tracking-wider flex items-center justify-center gap-3">
+        <span>PLAY GAME!</span>
+        <span class="text-3xl">🚀</span>
+      </button>
+
+      <!-- PWA Install Helper Banner -->
+      <div id="pwa-install-banner" class="hidden cartoon-box-sm bg-indigo-900 text-white rounded-2xl p-3 flex items-center justify-between gap-3">
+        <div class="flex items-center gap-2.5">
+          <span class="text-2xl">📲</span>
+          <div class="text-xs leading-snug">
+            <p class="font-black">Install on Home Screen</p>
+            <p class="text-indigo-200 font-bold" id="pwa-install-hint">Tap Share → "Add to Home Screen" for full-screen play!</p>
+          </div>
+        </div>
+        <button id="btn-pwa-install" onclick="App.triggerInstall()" class="hidden cartoon-pill bg-amber-300 text-[#1e1b4b] font-black text-xs px-3 py-2 rounded-xl shrink-0">
+          Install
+        </button>
+      </div>
+    </section>
+
+    <!-- ==================== VIEW 2: ACTIVE GAME BOARD ==================== -->
+    <section id="view-game" class="hidden flex-1 flex flex-col justify-between gap-2 py-1">
+      <!-- Scoreboard Header -->
+      <div id="scoreboard-container" class="grid grid-cols-2 gap-2.5">
+        <!-- Boy Score Pill -->
+        <div id="score-card-boy" class="cartoon-box-sm bg-gradient-to-r from-sky-300 to-blue-400 rounded-2xl p-2 flex items-center gap-2.5 transition-all duration-300">
+          <div id="game-avatar-boy" class="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white border-3 border-[#1e1b4b] overflow-hidden shrink-0 flex items-center justify-center"></div>
+          <div class="min-w-0 flex-1">
+            <div class="flex items-center justify-between gap-1">
+              <span id="game-name-boy" class="font-display font-bold text-sm sm:text-base text-[#1e1b4b] truncate">Joey</span>
+              <span id="turn-badge-boy" class="hidden text-[10px] font-black bg-amber-300 text-[#1e1b4b] border-2 border-[#1e1b4b] px-2 py-0.5 rounded-full animate-bounce">GO!</span>
+            </div>
+            <div class="flex items-baseline gap-1 mt-0.5">
+              <span id="game-score-boy" class="font-cartoon text-2xl text-white cartoon-title-stroke leading-none">0</span>
+              <span class="text-[11px] font-black text-[#1e1b4b]">pts</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Girl Score Pill -->
+        <div id="score-card-girl" class="cartoon-box-sm bg-gradient-to-r from-pink-300 to-rose-400 rounded-2xl p-2 flex items-center gap-2.5 transition-all duration-300">
+          <div id="game-avatar-girl" class="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white border-3 border-[#1e1b4b] overflow-hidden shrink-0 flex items-center justify-center"></div>
+          <div class="min-w-0 flex-1">
+            <div class="flex items-center justify-between gap-1">
+              <span id="game-name-girl" class="font-display font-bold text-sm sm:text-base text-[#1e1b4b] truncate">Alina</span>
+              <span id="turn-badge-girl" class="hidden text-[10px] font-black bg-amber-300 text-[#1e1b4b] border-2 border-[#1e1b4b] px-2 py-0.5 rounded-full animate-bounce">GO!</span>
+            </div>
+            <div class="flex items-baseline gap-1 mt-0.5">
+              <span id="game-score-girl" class="font-cartoon text-2xl text-white cartoon-title-stroke leading-none">0</span>
+              <span class="text-[11px] font-black text-[#1e1b4b]">pts</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cartoon Ribbon Turn Banner -->
+      <div id="turn-banner" class="cartoon-pill text-center py-1.5 px-4 rounded-full bg-amber-300 mx-auto">
+        <span id="turn-banner-text" class="font-display font-bold text-xs sm:text-sm text-[#1e1b4b]">Joey's Turn! Pick 2 cards</span>
+      </div>
+
+      <!-- Card Grid Container -->
+      <div id="board-wrapper" class="flex-1 flex items-center justify-center my-auto w-full">
+        <div id="card-grid" class="grid gap-2.5 sm:gap-3 w-full max-w-md mx-auto">
+          <!-- Cards injected dynamically -->
+        </div>
+      </div>
+
+      <!-- Bottom Legend & Quick Restart -->
+      <div class="cartoon-pill flex items-center justify-between gap-2 text-[10px] sm:text-[11px] font-black text-[#1e1b4b] bg-white px-3.5 py-2 rounded-2xl">
+        <div id="dynamic-scoring-legend" class="flex flex-wrap items-center gap-x-2 gap-y-0.5 leading-tight">
+          <span class="text-blue-700">🔵 Pair +4</span>
+          <span>•</span>
+          <span class="text-pink-600">🩷 Pair +3</span>
+          <span>•</span>
+          <span class="text-blue-600">🔵 Color +2</span>
+          <span>•</span>
+          <span class="text-pink-500">🩷 Color +1</span>
+        </div>
+        <button onclick="App.startGame()" class="shrink-0 bg-amber-300 hover:bg-amber-200 px-2.5 py-1 rounded-xl border-2 border-[#1e1b4b] text-[#1e1b4b] font-black">
+          🔄 New
+        </button>
+      </div>
+    </section>
+
+    <!-- ==================== VIEW 3: VICTORY / CELEBRATION ==================== -->
+    <section id="view-victory" class="hidden flex-1 flex flex-col items-center justify-center text-center gap-4 py-4">
+      <div class="cartoon-box bg-gradient-to-b from-amber-200 via-yellow-100 to-white rounded-3xl p-6 w-full max-w-md flex flex-col items-center relative overflow-hidden">
+        <div class="text-6xl mb-1 animate-bounce drop-shadow">🏆</div>
+        <h2 id="victory-headline" class="font-cartoon text-3xl sm:text-4xl text-amber-400 cartoon-title-stroke">AMAZING JOB!</h2>
+        <p id="victory-subtext" class="text-sm font-black text-indigo-900 mt-1">All cards matched!</p>
+
+        <!-- Final Scores Comparison -->
+        <div id="victory-scores" class="grid grid-cols-2 gap-3 w-full my-5">
+          <div class="cartoon-box-sm bg-sky-300 rounded-2xl p-3 flex flex-col items-center">
+            <div id="vic-avatar-boy" class="w-16 h-16 rounded-full border-3 border-[#1e1b4b] overflow-hidden bg-white mb-1"></div>
+            <span id="vic-name-boy" class="font-display font-bold text-[#1e1b4b]">Joey</span>
+            <span id="vic-score-boy" class="font-cartoon text-3xl text-white cartoon-title-stroke">0</span>
+            <span class="text-[11px] font-black text-[#1e1b4b]">POINTS</span>
+          </div>
+          <div class="cartoon-box-sm bg-pink-300 rounded-2xl p-3 flex flex-col items-center">
+            <div id="vic-avatar-girl" class="w-16 h-16 rounded-full border-3 border-[#1e1b4b] overflow-hidden bg-white mb-1"></div>
+            <span id="vic-name-girl" class="font-display font-bold text-[#1e1b4b]">Alina</span>
+            <span id="vic-score-girl" class="font-cartoon text-3xl text-white cartoon-title-stroke">0</span>
+            <span class="text-[11px] font-black text-[#1e1b4b]">POINTS</span>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-2.5 w-full">
+          <button onclick="App.startGame()" class="btn-chunky w-full py-3.5 rounded-2xl bg-gradient-to-r from-lime-400 to-emerald-400 text-[#1e1b4b] font-cartoon text-2xl tracking-wide">
+            PLAY AGAIN! 🔄
+          </button>
+          <button onclick="App.goHome()" class="cartoon-pill w-full py-2.5 rounded-2xl bg-white hover:bg-amber-100 text-[#1e1b4b] font-display font-bold text-base">
+            Change Players / Size
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== VIEW 4: TIME'S UP (OUT OF CREDITS) ==================== -->
+    <section id="view-timesup" class="hidden flex-1 flex flex-col items-center justify-center text-center py-4">
+      <div class="cartoon-box bg-gradient-to-b from-indigo-950 via-indigo-900 to-purple-900 text-white rounded-3xl p-6 w-full max-w-md flex flex-col items-center">
+        <div class="text-5xl mb-2 animate-float-slow">⏰🌙</div>
+        <h2 id="timesup-headline" class="font-cartoon text-3xl text-amber-300 cartoon-title-stroke">TIME'S UP!</h2>
+        <p id="timesup-reason-text" class="text-indigo-100 font-bold text-sm sm:text-base mt-1 leading-relaxed">
+          Awesome playing today, <span class="label-boy-name font-black text-sky-300">Joey</span> &amp; <span class="label-girl-name font-black text-pink-300">Alina</span>!
+        </p>
+
+        <!-- Final Results Summary when Time Runs Out -->
+        <div class="grid grid-cols-2 gap-3 w-full my-4 text-[#1e1b4b]">
+          <div class="cartoon-box-sm bg-sky-300 rounded-2xl p-2.5 flex flex-col items-center">
+            <div id="tu-avatar-boy" class="w-12 h-12 rounded-full border-3 border-[#1e1b4b] overflow-hidden bg-white mb-1"></div>
+            <span id="tu-name-boy" class="font-display font-bold text-sm truncate max-w-full">Joey</span>
+            <span id="tu-score-boy" class="font-cartoon text-2xl text-white cartoon-title-stroke">0</span>
+            <span id="tu-stars-boy" class="text-[10px] font-black bg-white/80 px-2 py-0.5 rounded-full mt-0.5">⭐ Total: 0</span>
+          </div>
+          <div class="cartoon-box-sm bg-pink-300 rounded-2xl p-2.5 flex flex-col items-center">
+            <div id="tu-avatar-girl" class="w-12 h-12 rounded-full border-3 border-[#1e1b4b] overflow-hidden bg-white mb-1"></div>
+            <span id="tu-name-girl" class="font-display font-bold text-sm truncate max-w-full">Alina</span>
+            <span id="tu-score-girl" class="font-cartoon text-2xl text-white cartoon-title-stroke">0</span>
+            <span id="tu-stars-girl" class="text-[10px] font-black bg-white/80 px-2 py-0.5 rounded-full mt-0.5">⭐ Total: 0</span>
+          </div>
+        </div>
+
+        <div class="bg-amber-300 text-[#1e1b4b] border-3 border-[#1e1b4b] shadow-[0_4px_0_#1e1b4b] rounded-2xl p-3.5 w-full">
+          <p class="text-base sm:text-lg font-display font-bold">📱 Please hand the phone back to Mum!</p>
+        </div>
+
+        <button onclick="App.openMumModal()" class="mt-4 text-xs text-indigo-300/90 hover:text-white underline font-black py-2 px-4">
+          🔒 Mum's Unlock
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================== MODAL 1: SELFIE CAMERA & AVATAR CREATOR ==================== -->
+  <div id="modal-camera" class="hidden fixed inset-0 z-40 bg-indigo-950/75 backdrop-blur-sm flex items-center justify-center p-3">
+    <div class="cartoon-box bg-amber-50 rounded-3xl w-full max-w-sm p-4 flex flex-col items-center">
+      <div class="w-full flex items-center justify-between mb-2">
+        <h3 id="camera-modal-title" class="font-display font-bold text-xl text-[#1e1b4b]">Take a Selfie!</h3>
+        <button onclick="App.closeCameraModal()" class="cartoon-pill w-8 h-8 rounded-full bg-rose-400 text-[#1e1b4b] font-black flex items-center justify-center">✕</button>
+      </div>
+
+      <!-- Live Video / Preview Circle -->
+      <div class="relative w-52 h-52 rounded-full overflow-hidden bg-slate-900 border-4 border-[#1e1b4b] shadow-lg flex items-center justify-center my-2">
+        <video id="camera-video" autoplay playsinline muted class="w-full h-full object-cover scale-x-[-1] hidden"></video>
+        <canvas id="camera-preview-canvas" width="300" height="300" class="w-full h-full object-cover"></canvas>
+        <!-- Live Sticker Overlay Preview -->
+        <div id="live-sticker-overlay" class="absolute inset-0 pointer-events-none flex items-start justify-center"></div>
+      </div>
+
+      <!-- Fun Kid Stickers Selector -->
+      <div class="w-full my-2">
+        <p class="text-xs font-black text-center text-[#1e1b4b] uppercase mb-1.5">🎩 Pick a Fun Hat / Ears!</p>
+        <div class="grid grid-cols-5 gap-1.5">
+          <button onclick="App.selectSticker('none')" data-sticker="none" class="sticker-btn p-2 rounded-xl text-lg">🚫</button>
+          <button onclick="App.selectSticker('dino')" data-sticker="dino" class="sticker-btn p-2 rounded-xl text-lg">🦖</button>
+          <button onclick="App.selectSticker('crown')" data-sticker="crown" class="sticker-btn p-2 rounded-xl text-lg">👑</button>
+          <button onclick="App.selectSticker('bunny')" data-sticker="bunny" class="sticker-btn p-2 rounded-xl text-lg">🐰</button>
+          <button onclick="App.selectSticker('cowboy')" data-sticker="cowboy" class="sticker-btn p-2 rounded-xl text-lg">🤠</button>
+        </div>
+      </div>
+
+      <!-- Camera Controls -->
+      <div class="flex flex-col gap-2 w-full mt-2">
+        <div class="grid grid-cols-2 gap-2">
+          <button id="btn-start-cam" onclick="App.startCameraStream()" class="btn-chunky py-2.5 px-3 rounded-2xl bg-sky-400 text-[#1e1b4b] font-display font-bold text-sm flex items-center justify-center gap-1">
+            <span>🎥</span> Live Camera
+          </button>
+          <button id="btn-snap-photo" onclick="App.captureSelfie()" class="hidden btn-chunky py-2.5 px-3 rounded-2xl bg-lime-400 text-[#1e1b4b] font-display font-bold text-sm flex items-center justify-center gap-1">
+            <span>📸</span> Snap Pic!
+          </button>
+          <label class="btn-chunky py-2.5 px-3 rounded-2xl bg-amber-300 text-[#1e1b4b] font-display font-bold text-sm flex items-center justify-center gap-1 cursor-pointer text-center">
+            <span>🖼️</span> Upload Pic
+            <input type="file" accept="image/*" capture="user" onchange="App.handleImageUpload(event)" class="hidden" />
+          </label>
+        </div>
+
+        <button onclick="App.useDefaultAvatar()" class="w-full py-2 rounded-xl bg-white border-2 border-[#1e1b4b] hover:bg-amber-100 text-[#1e1b4b] font-black text-xs">
+          Use Cute Cartoon Avatar Instead
+        </button>
+
+        <button onclick="App.saveAvatarAndClose()" class="btn-chunky w-full py-3 rounded-2xl bg-gradient-to-r from-sky-400 via-purple-400 to-pink-400 text-[#1e1b4b] font-cartoon text-lg tracking-wide mt-1">
+          SAVE PHOTO! ✨
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL 2: MUM'S SECRET PARENT CONTROLS ==================== -->
+  <div id="modal-mum" class="hidden fixed inset-0 z-50 bg-indigo-950/80 backdrop-blur-sm flex items-center justify-center p-3">
+    <div class="cartoon-box bg-white rounded-3xl w-full max-w-sm p-5">
+      <!-- Step A: Passcode Entry -->
+      <div id="mum-pin-step" class="flex flex-col items-center text-center">
+        <div class="cartoon-pill w-12 h-12 rounded-2xl bg-amber-300 text-[#1e1b4b] flex items-center justify-center text-2xl mb-2">🔒</div>
+        <h3 id="mum-modal-heading" class="font-display font-bold text-xl text-[#1e1b4b]">Mum's Secret Zone</h3>
+        <p id="mum-modal-subtext" class="text-xs text-slate-600 font-bold mt-0.5">Enter Mum's Passcode</p>
+
+        <input id="mum-pin-input" type="password" autocapitalize="none" autocomplete="off" autocorrect="off" spellcheck="false" maxlength="20" placeholder="Passcode"
+          onkeyup="if(event.key==='Enter') App.verifyMumPin()"
+          class="cartoon-pill mt-4 w-52 text-center text-xl tracking-wider font-black py-2.5 px-3 rounded-2xl outline-none bg-amber-50" />
+
+        <div class="grid grid-cols-2 gap-2.5 w-full mt-5">
+          <button onclick="App.closeMumModal()" class="cartoon-pill py-2.5 rounded-2xl bg-slate-100 font-black text-[#1e1b4b] text-sm">Cancel</button>
+          <button onclick="App.verifyMumPin()" class="btn-chunky py-2.5 rounded-2xl bg-indigo-500 text-white font-display font-bold text-sm">Unlock</button>
+        </div>
+      </div>
+
+      <!-- Step B: Parent Controls Dashboard -->
+      <div id="mum-settings-step" class="hidden flex flex-col gap-3.5">
+        <div class="flex items-center justify-between border-b-2 border-[#1e1b4b] pb-2">
+          <h3 class="font-display font-bold text-xl text-[#1e1b4b]">⚙️ Parent Controls</h3>
+          <button onclick="App.closeMumModal()" class="cartoon-pill w-8 h-8 rounded-full bg-rose-400 text-[#1e1b4b] font-black">✕</button>
+        </div>
+
+        <!-- Countdown Timer Limit Control -->
+        <div id="panel-limit-timer" class="cartoon-box-sm bg-amber-100 rounded-2xl p-3">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-black uppercase text-[#1e1b4b]">⏱️ Play Timer</span>
+            <span id="mum-timer-display" class="font-display font-bold text-lg text-indigo-800">10:00</span>
+          </div>
+
+          <!-- Quick Minute Presets -->
+          <div class="grid grid-cols-5 gap-1.5 mb-2">
+            <button onclick="App.setTimerMinutes(0)" class="py-1.5 rounded-xl bg-rose-400 text-[#1e1b4b] border-2 border-[#1e1b4b] font-black text-xs">Lock</button>
+            <button onclick="App.setTimerMinutes(5)" class="py-1.5 rounded-xl bg-white text-[#1e1b4b] border-2 border-[#1e1b4b] font-black text-xs">5m</button>
+            <button onclick="App.setTimerMinutes(10)" class="py-1.5 rounded-xl bg-white text-[#1e1b4b] border-2 border-[#1e1b4b] font-black text-xs">10m</button>
+            <button onclick="App.setTimerMinutes(15)" class="py-1.5 rounded-xl bg-white text-[#1e1b4b] border-2 border-[#1e1b4b] font-black text-xs">15m</button>
+            <button onclick="App.setTimerMinutes(30)" class="py-1.5 rounded-xl bg-lime-400 text-[#1e1b4b] border-2 border-[#1e1b4b] font-black text-xs">30m</button>
+          </div>
+
+          <div class="flex items-center justify-between gap-2 mt-2">
+            <button onclick="App.adjustTimerMinutes(-1)" class="flex-1 py-1.5 rounded-xl bg-white border-2 border-[#1e1b4b] font-black text-xs text-[#1e1b4b]">-1 Min</button>
+            <button onclick="App.adjustTimerMinutes(2)" class="flex-1 py-1.5 rounded-xl bg-white border-2 border-[#1e1b4b] font-black text-xs text-[#1e1b4b]">+2 Mins</button>
+          </div>
+          <p class="text-[10px] font-bold text-slate-700 mt-1.5 text-center">Warns at 1m, 30s &amp; 10s, then shows results &amp; locks!</p>
+        </div>
+
+        <!-- Sound Toggle & Score Reset -->
+        <div class="grid grid-cols-2 gap-2">
+          <button id="btn-toggle-sound" onclick="App.toggleSound()" class="cartoon-pill py-2.5 px-3 rounded-2xl bg-amber-200 font-black text-xs text-[#1e1b4b] flex items-center justify-center gap-1.5">
+            <span>🔊</span> Sound: ON
+          </button>
+          <button onclick="App.resetLifetimeScores()" class="cartoon-pill py-2.5 px-3 rounded-2xl bg-pink-200 font-black text-xs text-[#1e1b4b] flex items-center justify-center gap-1.5">
+            <span>🧹</span> Reset Stars
+          </button>
+        </div>
+
+        <!-- Change Passcode -->
+        <div class="bg-slate-100 rounded-2xl p-2.5 border-2 border-[#1e1b4b] flex flex-col gap-1.5">
+          <div class="flex items-center justify-between gap-2">
+            <input id="new-pin-input" type="text" autocapitalize="none" autocomplete="off" maxlength="20" placeholder="New alphanumeric passcode"
+              class="w-full bg-white px-2.5 py-1.5 rounded-xl border-2 border-[#1e1b4b] text-xs font-black outline-none" />
+            <button onclick="App.changeMumPin()" class="shrink-0 bg-indigo-600 text-white border-2 border-[#1e1b4b] text-xs font-black px-3 py-1.5 rounded-xl">
+              Save
+            </button>
+          </div>
+          <p class="text-[10px] font-bold text-slate-500">Letters &amp; numbers allowed (case-insensitive).</p>
+        </div>
+
+        <button onclick="App.closeMumModal()" class="btn-chunky w-full py-3 rounded-2xl bg-lime-400 text-[#1e1b4b] font-cartoon text-lg">
+          DONE!
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /**
+     * ============================================================================
+     * JOEY & ALINA'S SUPER MATCH - PWA KIDS MEMORY GAME
+     * ============================================================================
+     * Architecture:
+     * 1. Web Audio API Kid-Friendly SoundFX Synthesizer (flip, color match, exact match, victory)
+     * 2. Custom SVG Character Art Library (Dinosaurs, Bluey-style Pup, Toy Story, Penguins,
+     *    Hello Kitty-style Cat, Princess Crown/Castle, Bunnies, Unicorn)
+     * 3. Guaranteed-Clearable Deck Builder (ensures even counts of Blue and Pink cards)
+     * 4. Live Camera Selfie + Fun Sticker Compositor + LocalStorage Persistence
+     * 5. Mum's Secret PIN-protected Credit / Game Limit Controller
+     */
+
+    // ============================================================================
+    // 1. WEB AUDIO API CARTOON SOUND EFFECTS SYNTHESIZER (NO EXTERNAL AUDIO URLS)
+    // ============================================================================
+    const SoundFX = {
+      ctx: null,
+      enabled: true,
+
+      init() {
+        try {
+          if (!this.ctx) {
+            const AudioCtx = window.AudioContext || window.webkitAudioContext;
+            if (AudioCtx) {
+              this.ctx = new AudioCtx();
+            }
+          }
+          if (this.ctx && this.ctx.state === 'suspended') {
+            this.ctx.resume();
+          }
+        } catch (e) {
+          console.warn('Web Audio not available:', e);
+        }
+      },
+
+      playTone(freq, type = 'sine', duration = 0.14, delay = 0, volume = 0.22, slideTo = null) {
+        if (!this.enabled) return;
+        this.init();
+        if (!this.ctx) return;
+
+        try {
+          const now = this.ctx.currentTime + delay;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, now);
+          if (slideTo) {
+            osc.frequency.exponentialRampToValueAtTime(slideTo, now + duration);
+          }
+
+          gain.gain.setValueAtTime(0.001, now);
+          gain.gain.linearRampToValueAtTime(volume, now + 0.015);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+
+          osc.start(now);
+          osc.stop(now + duration + 0.02);
+        } catch (e) {
+          // Ignore audio playback errors on locked devices
+        }
+      },
+
+      flip() {
+        // Bouncy cartoon "boop" pop
+        this.playTone(320, 'sine', 0.11, 0, 0.2, 560);
+      },
+
+      colorMatch() {
+        // Cheerful two-note chime for color bonus (+1 / +2)
+        this.playTone(523.25, 'triangle', 0.15, 0, 0.24);     // C5
+        this.playTone(659.25, 'triangle', 0.22, 0.11, 0.26);  // E5
+      },
+
+      exactMatch() {
+        // Exciting superhero arpeggio for exact picture pair (+3 / +4)
+        this.playTone(523.25, 'triangle', 0.14, 0, 0.25);     // C5
+        this.playTone(659.25, 'triangle', 0.14, 0.09, 0.25);  // E5
+        this.playTone(783.99, 'triangle', 0.14, 0.18, 0.26);  // G5
+        this.playTone(1046.50, 'sine', 0.30, 0.27, 0.28);     // C6
+      },
+
+      mismatch() {
+        // Gentle cartoon wobble when cards turn back over
+        this.playTone(310, 'sine', 0.14, 0, 0.15, 230);
+      },
+
+      timerWarning(urgent = false) {
+        if (urgent) {
+          this.playTone(880, 'sine', 0.12, 0, 0.22);
+        } else {
+          this.playTone(587.33, 'triangle', 0.14, 0, 0.22); // D5
+          this.playTone(783.99, 'triangle', 0.18, 0.12, 0.24); // G5
+        }
+      },
+
+      victory() {
+        // Joyful fanfare melody when board is cleared
+        const notes = [
+          { f: 523.25, d: 0.14, t: 0.00 }, // C5
+          { f: 659.25, d: 0.14, t: 0.13 }, // E5
+          { f: 783.99, d: 0.14, t: 0.26 }, // G5
+          { f: 1046.50, d: 0.26, t: 0.40 }, // C6
+          { f: 783.99, d: 0.14, t: 0.68 }, // G5
+          { f: 1046.50, d: 0.42, t: 0.84 }  // C6
+        ];
+        notes.forEach(n => this.playTone(n.f, 'triangle', n.d, n.t, 0.28));
+      }
+    };
+
+    // ============================================================================
+    // 2. CUSTOM ILLUSTRATED CARTOON CARD ARTWORK CATALOG (BLUE & PINK DECKS)
+    // ============================================================================
+    const CARD_CATALOG = [
+      // --- BOY / BLUE THEME CARDS (Dinosaurs, Bluey, Toy Story, Penguins) ---
+      {
+        id: 'trex',
+        name: 'T-Rex',
+        team: 'blue',
+        svg: `<svg viewBox="0 0 100 100" class="w-15 h-15 sm:w-16 sm:h-16">
+          <circle cx="50" cy="50" r="43" fill="#fef08a" stroke="#1e1b4b" stroke-width="3"/>
+          <!-- Back Spikes -->
+          <polygon points="34,28 24,22 33,35" fill="#fb923c" stroke="#1e1b4b" stroke-width="2.5" stroke-linejoin="round"/>
+          <polygon points="32,38 22,35 32,45" fill="#fb923c" stroke="#1e1b4b" stroke-width="2.5" stroke-linejoin="round"/>
+          <!-- Feet -->
+          <path d="M36 70 L36 84 M56 70 L56 84" stroke="#1e1b4b" stroke-width="8" stroke-linecap="round"/>
+          <path d="M36 70 L36 84 M56 70 L56 84" stroke="#4ade80" stroke-width="4" stroke-linecap="round"/>
+          <!-- Dino Body & Big Head -->
+          <path d="M20 58 Q14 44 28 42 L40 42 L43 22 Q66 15 78 29 Q82 41 66 45 L56 45 L61 66 Q45 77 27 66 Z" fill="#4ade80" stroke="#1e1b4b" stroke-width="3.5" stroke-linejoin="round"/>
+          <!-- Belly & Little Arm -->
+          <path d="M52 48 Q58 56 52 65" stroke="#bbf7d0" stroke-width="5" fill="none" stroke-linecap="round"/>
+          <path d="M62 50 L70 52" stroke="#1e1b4b" stroke-width="3.5" stroke-linecap="round"/>
+          <!-- Big Cartoon Eye & Rosy Cheek -->
+          <circle cx="62" cy="29" r="6" fill="#ffffff" stroke="#1e1b4b" stroke-width="2.5"/>
+          <circle cx="63.5" cy="29" r="3" fill="#1e1b4b"/>
+          <circle cx="64.5" cy="27.5" r="1.2" fill="#ffffff"/>
+          <circle cx="55" cy="36" r="3.5" fill="#fb7185" opacity="0.8"/>
+          <!-- Happy Grin & Little Tooth -->
+          <path d="M62 39 Q70 42 76 37" stroke="#1e1b4b" stroke-width="2.8" fill="none" stroke-linecap="round"/>
+          <polygon points="69,39 71,43 73,38.5" fill="#ffffff" stroke="#1e1b4b" stroke-width="1.5"/>
+        </svg>`
+      },
+      {
+        id: 'stego',
+        name: 'Stego',
+        team: 'blue',
+        svg: `<svg viewBox="0 0 100 100" class="w-15 h-15 sm:w-16 sm:h-16">
+          <circle cx="50" cy="50" r="43" fill="#dcfce7" stroke="#1e1b4b" stroke-width="3"/>
+          <!-- Stego Plates -->
+          <polygon points="31,40 37,22 45,37" fill="#facc15" stroke="#1e1b4b" stroke-width="2.8" stroke-linejoin="round"/>
+          <polygon points="44,36 52,18 60,36" fill="#fb923c" stroke="#1e1b4b" stroke-width="2.8" stroke-linejoin="round"/>
+          <polygon points="59,39 67,23 73,41" fill="#facc15" stroke="#1e1b4b" stroke-width="2.8" stroke-linejoin="round"/>
+          <!-- Body -->
+          <path d="M20 62 Q20 35 52 35 Q77 35 80 58 L87 62 L77 67 L71 67 L71 79 L60 79 L60 67 L42 67 L42 79 L31 79 L31 64 Z" fill="#38bdf8" stroke="#1e1b4b" stroke-width="3.5" stroke-linejoin="round"/>
+          <!-- Spots -->
+          <circle cx="48" cy="48" r="3.5" fill="#0284c7"/>
+          <circle cx="60" cy="52" r="4" fill="#0284c7"/>
+          <!-- Cute Eye & Smile -->
+          <circle cx="29" cy="50" r="5" fill="#ffffff" stroke="#1e1b4b" stroke-width="2.2"/>
+          <circle cx="28" cy="50" r="2.5" fill="#1e1b4b"/>
+          <circle cx="29" cy="48.8" r="1" fill="#ffffff"/>
+          <path d="M22 58 Q28 62 34 58" stroke="#1e1b4b" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        </svg>`
+      },
+      {
+        id: 'bluey_pup',
+        name: 'Blue Pup',
+        team: 'blue',
+        svg: `<svg viewBox="0 0 100 100" class="w-15 h-15 sm:w-16 sm:h-16">
+          <circle cx="50" cy="50" r="43" fill="#fef9c3" stroke="#1e1b4b" stroke-width="3"/>
+          <!-- Big Pointy Ears -->
+          <polygon points="23,43 20,12 43,27" fill="#3b82f6" stroke="#1e1b4b" stroke-width="3.2" stroke-linejoin="round"/>
+          <polygon points="77,43 80,12 57,27" fill="#3b82f6" stroke="#1e1b4b" stroke-width="3.2" stroke-linejoin="round"/>
+          <polygon points="27,37 25,20 38,29" fill="#93c5fd"/>
+          <polygon points="73,37 75,20 62,29" fill="#93c5fd"/>
+          <!-- Head -->
+          <rect x="25" y="27" width="50" height="53" rx="23" fill="#60a5fa" stroke="#1e1b4b" stroke-width="3.5"/>
+          <!-- Eyebrow Spots & Eye Patches -->
+          <ellipse cx="40" cy="34" rx="5" ry="3" fill="#fde047" stroke="#1e1b4b" stroke-width="1.5"/>
+          <ellipse cx="60" cy="34" rx="5" ry="3" fill="#fde047" stroke="#1e1b4b" stroke-width="1.5"/>
+          <circle cx="38" cy="46" r="10.5" fill="#bfdbfe"/>
+          <circle cx="62" cy="46" r="10.5" fill="#bfdbfe"/>
+          <!-- Expressive Cartoon Eyes -->
+          <circle cx="39" cy="45" r="5.5" fill="#ffffff" stroke="#1e1b4b" stroke-width="2.2"/>
+          <circle cx="61" cy="45" r="5.5" fill="#ffffff" stroke="#1e1b4b" stroke-width="2.2"/>
+          <circle cx="40" cy="45" r="2.8" fill="#1e1b4b"/>
+          <circle cx="60" cy="45" r="2.8" fill="#1e1b4b"/>
+          <circle cx="41" cy="43.5" r="1.1" fill="#ffffff"/>
+          <circle cx="61" cy="43.5" r="1.1" fill="#ffffff"/>
+          <!-- Tan Muzzle & Happy Smile -->
+          <ellipse cx="50" cy="64" rx="17" ry="12.5" fill="#fde68a" stroke="#1e1b4b" stroke-width="2.8"/>
+          <ellipse cx="50" cy="58" rx="6.5" ry="4.5" fill="#1e1b4b"/>
+          <ellipse cx="48.5" cy="56.8" rx="2" ry="1" fill="#ffffff"/>
+          <path d="M42 67 Q50 75 58 67" stroke="#1e1b4b" stroke-width="2.8" fill="none" stroke-linecap="round"/>
+        </svg>`
+      },
+      {
+        id: 'penguin',
+        name: 'Penguin',
+        team: 'blue',
+        svg: `<svg viewBox="0 0 100 100" class="w-15 h-15 sm:w-16 sm:h-16">
+          <circle cx="50" cy="50" r="43" fill="#bae6fd" stroke="#1e1b4b" stroke-width="3"/>
+          <!-- Flippers -->
+          <ellipse cx="22" cy="54" rx="7" ry="16" transform="rotate(20 22 54)" fill="#1e293b" stroke="#1e1b4b" stroke-width="3"/>
+          <ellipse cx="78" cy="54" rx="7" ry="16" transform="rotate(-20 78 54)" fill="#1e293b" stroke="#1e1b4b" stroke-width="3"/>
+          <!-- Round Body -->
+          <ellipse cx="50" cy="53" rx="26" ry="31" fill="#1e293b" stroke="#1e1b4b" stroke-width="3.5"/>
+          <ellipse cx="50" cy="57" rx="18" ry="23" fill="#ffffff"/>
+          <!-- Big Eyes & Rosy Cheeks -->
+          <circle cx="41" cy="39" r="5" fill="#ffffff" stroke="#1e1b4b" stroke-width="2"/>
+          <circle cx="59" cy="39" r="5" fill="#ffffff" stroke="#1e1b4b" stroke-width="2"/>
+          <circle cx="42" cy="39" r="2.5" fill="#1e1b4b"/>
+          <circle cx="58" cy="39" r="2.5" fill="#1e1b4b"/>
+          <circle cx="34" cy="45" r="3.5" fill="#fb7185" opacity="0.8"/>
+          <circle cx="66" cy="45" r="3.5" fill="#fb7185" opacity="0.8"/>
+          <!-- Beak & Scarf -->
+          <polygon points="43,45 57,45 50,53" fill="#facc15" stroke="#1e1b4b" stroke-width="2.2" stroke-linejoin="round"/>
+          <path d="M30 55 Q50 63 70 55" stroke="#fb923c" stroke-width="7" fill="none" stroke-linecap="round"/>
+          <path d="M30 55 Q50 63 70 55" stroke="#1e1b4b" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <!-- Feet -->
+          <ellipse cx="38" cy="83" rx="9" ry="4.5" fill="#fb923c" stroke="#1e1b4b" stroke-width="2.5"/>
+          <ellipse cx="62" cy="83" rx="9" ry="4.5" fill="#fb923c" stroke="#1e1b4b" stroke-width="2.5"/>
+        </svg>`
+      },
+      {
+        id: 'space_ranger',
+        name: 'Space Ranger',
+        team: 'blue',
+        svg: `<svg viewBox="0 0 100 100" class="w-15 h-15 sm:w-16 sm:h-16">
+          <circle cx="50" cy="50" r="43" fill="#ddd6fe" stroke="#1e1b4b" stroke-width="3"/>
+          <!-- Helmet Dome -->
+          <circle cx="50" cy="50" r="34" fill="#e0f2fe" stroke="#1e1b4b" stroke-width="3.5"/>
+          <!-- Purple Hood & Face -->
+          <circle cx="50" cy="52" r="23" fill="#8b5cf6" stroke="#1e1b4b" stroke-width="2.8"/>
+          <circle cx="50" cy="53" r="16.5" fill="#fed7aa" stroke="#1e1b4b" stroke-width="2.2"/>
+          <circle cx="44" cy="49" r="3" fill="#1e1b4b"/>
+          <circle cx="56" cy="49" r="3" fill="#1e1b4b"/>
+          <circle cx="45" cy="48" r="1" fill="#ffffff"/>
+          <circle cx="57" cy="48" r="1" fill="#ffffff"/>
+          <path d="M43 58 Q50 64 57 58" stroke="#1e1b4b" stroke-width="2.8" fill="none" stroke-linecap="round"/>
+          <!-- Lime Green Space Suit Collar -->
+          <path d="M24 75 Q50 65 76 75" stroke="#4ade80" stroke-width="9" fill="none" stroke-linecap="round"/>
+          <path d="M24 75 Q50 65 76 75" stroke="#1e1b4b" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <!-- Visor Gloss Shine -->
+          <path d="M28 32 Q36 22 48 22" stroke="#ffffff" stroke-width="4" fill="none" stroke-linecap="round"/>
+        </svg>`
+      },
+      {
+        id: 'toy_alien',
+        name: 'Space Alien',
+        team: 'blue',
+        svg: `<svg viewBox="0 0 100 100" class="w-15 h-15 sm:w-16 sm:h-16">
+          <circle cx="50" cy="50" r="43" fill="#fef08a" stroke="#1e1b4b" stroke-width="3"/>
+          <!-- Antenna -->
+          <line x1="50" y1="26" x2="50" y2="12" stroke="#1e1b4b" stroke-width="4.5" stroke-linecap="round"/>
+          <circle cx="50" cy="11" r="6" fill="#a3e635" stroke="#1e1b4b" stroke-width="2.8"/>
+          <!-- Alien Head -->
+          <ellipse cx="50" cy="53" rx="28" ry="23" fill="#a3e635" stroke="#1e1b4b" stroke-width="3.5"/>
+          <!-- 3 Big Cartoon Eyes -->
+          <circle cx="36" cy="47" r="6.5" fill="#ffffff" stroke="#1e1b4b" stroke-width="2.5"/>
+          <circle cx="50" cy="44" r="6.5" fill="#ffffff" stroke="#1e1b4b" stroke-width="2.5"/>
+          <circle cx="64" cy="47" r="6.5" fill="#ffffff" stroke="#1e1b4b" stroke-width="2.5"/>
+          <circle cx="36" cy="47" r="2.8" fill="#1e1b4b"/>
+          <circle cx="50" cy="44" r="2.8" fill="#1e1b4b"/>
+          <circle cx="64" cy="47" r="2.8" fill="#1e1b4b"/>
+          <path d="M38 61 Q50 71 62 61" stroke="#1e1b4b" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <!-- Mini UFO Rim -->
+          <ellipse cx="50" cy="79" rx="32" ry="8" fill="#38bdf8" stroke="#1e1b4b" stroke-width="3"/>
+        </svg>`
+      },
+
+      // --- GIRL / PINK THEME CARDS (Hello Kitty, Disney Princess, Bunnies, Toy Story) ---
+      {
+        id: 'hello_kitty',
+        name: 'Bow Kitty',
+        team: 'pink',
+        svg: `<svg viewBox="0 0 100 100" class="w-15 h-15 sm:w-16 sm:h-16">
+          <circle cx="50" cy="50" r="43" fill="#fce7f3" stroke="#1e1b4b" stroke-width="3"/>
+          <!-- Cat Ears -->
+          <polygon points="23,43 25,16 45,29" fill="#ffffff" stroke="#1e1b4b" stroke-width="3.2" stroke-linejoin="round"/>
+          <polygon points="77,43 75,16 55,29" fill="#ffffff" stroke="#1e1b4b" stroke-width="3.2" stroke-linejoin="round"/>
+          <!-- Face -->
+          <ellipse cx="50" cy="54" rx="30" ry="23" fill="#ffffff" stroke="#1e1b4b" stroke-width="3.5"/>
+          <!-- Big Cartoon Red/Pink Bow -->
+          <circle cx="65" cy="27" r="8.5" fill="#f43f5e" stroke="#1e1b4b" stroke-width="2.8"/>
+          <circle cx="79" cy="34" r="8.5" fill="#f43f5e" stroke="#1e1b4b" stroke-width="2.8"/>
+          <circle cx="72" cy="30.5" r="5" fill="#fda4af" stroke="#1e1b4b" stroke-width="2.5"/>
+          <!-- Eyes, Rosy Cheeks & Yellow Nose -->
+          <ellipse cx="38" cy="53" rx="3.2" ry="4.5" fill="#1e1b4b"/>
+          <ellipse cx="62" cy="53" rx="3.2" ry="4.5" fill="#1e1b4b"/>
+          <circle cx="32" cy="60" r="4" fill="#f9a8d4" opacity="0.85"/>
+          <circle cx="68" cy="60" r="4" fill="#f9a8d4" opacity="0.85"/>
+          <ellipse cx="50" cy="60" rx="4.5" ry="3.2" fill="#facc15" stroke="#1e1b4b" stroke-width="2"/>
+          <!-- Whiskers -->
+          <line x1="14" y1="49" x2="25" y2="51" stroke="#1e1b4b" stroke-width="2.8" stroke-linecap="round"/>
+          <line x1="14" y1="58" x2="25" y2="58" stroke="#1e1b4b" stroke-width="2.8" stroke-linecap="round"/>
+          <line x1="86" y1="49" x2="75" y2="51" stroke="#1e1b4b" stroke-width="2.8" stroke-linecap="round"/>
+          <line x1="86" y1="58" x2="75" y2="58" stroke="#1e1b4b" stroke-width="2.8" stroke-linecap="round"/>
+        </svg>`
+      },
+      {
+        id: 'princess_crown',
+        name: 'Princess',
+        team: 'pink',
+        svg: `<svg viewBox="0 0 100 100" class="w-15 h-15 sm:w-16 sm:h-16">
+          <circle cx="50" cy="50" r="43" fill="#fdf2f8" stroke="#1e1b4b" stroke-width="3"/>
+          <!-- Golden Tiara -->
+          <path d="M18 68 L24 32 L40 49 L50 24 L60 49 L76 32 L82 68 Z" fill="#fde047" stroke="#1e1b4b" stroke-width="3.5" stroke-linejoin="round"/>
+          <rect x="18" y="65" width="64" height="12" rx="5" fill="#facc15" stroke="#1e1b4b" stroke-width="3.2"/>
+          <!-- Sparkling Gems -->
+          <circle cx="50" cy="54" r="6" fill="#ec4899" stroke="#1e1b4b" stroke-width="2.2"/>
+          <circle cx="33" cy="58" r="4" fill="#38bdf8" stroke="#1e1b4b" stroke-width="2"/>
+          <circle cx="67" cy="58" r="4" fill="#38bdf8" stroke="#1e1b4b" stroke-width="2"/>
+          <circle cx="50" cy="20" r="4.5" fill="#fde047" stroke="#1e1b4b" stroke-width="2.2"/>
+          <circle cx="24" cy="29" r="3.5" fill="#f472b6" stroke="#1e1b4b" stroke-width="2"/>
+          <circle cx="76" cy="29" r="3.5" fill="#f472b6" stroke="#1e1b4b" stroke-width="2"/>
+        </svg>`
+      },
+      {
+        id: 'pink_castle',
+        name: 'Castle',
+        team: 'pink',
+        svg: `<svg viewBox="0 0 100 100" class="w-15 h-15 sm:w-16 sm:h-16">
+          <circle cx="50" cy="50" r="43" fill="#fae8ff" stroke="#1e1b4b" stroke-width="3"/>
+          <!-- Flags -->
+          <polygon points="50,10 61,14 50,18" fill="#facc15" stroke="#1e1b4b" stroke-width="2"/>
+          <!-- Side Towers -->
+          <rect x="23" y="45" width="15" height="35" fill="#f472b6" stroke="#1e1b4b" stroke-width="3"/>
+          <polygon points="20,45 30.5,26 41,45" fill="#db2777" stroke="#1e1b4b" stroke-width="3" stroke-linejoin="round"/>
+          <rect x="62" y="45" width="15" height="35" fill="#f472b6" stroke="#1e1b4b" stroke-width="3"/>
+          <polygon points="59,45 69.5,26 80,45" fill="#db2777" stroke="#1e1b4b" stroke-width="3" stroke-linejoin="round"/>
+          <!-- Center Keep -->
+          <rect x="37" y="37" width="26" height="43" fill="#fbcfe8" stroke="#1e1b4b" stroke-width="3"/>
+          <polygon points="34,37 50,16 66,37" fill="#ec4899" stroke="#1e1b4b" stroke-width="3" stroke-linejoin="round"/>
+          <!-- Arch Door -->
+          <path d="M43 80 L43 63 Q50 54 57 63 L57 80 Z" fill="#9d174d" stroke="#1e1b4b" stroke-width="2.5"/>
+        </svg>`
+      },
+      {
+        id: 'cute_bunny',
+        name: 'Bunny',
+        team: 'pink',
+        svg: `<svg viewBox="0 0 100 100" class="w-15 h-15 sm:w-16 sm:h-16">
+          <circle cx="50" cy="50" r="43" fill="#fce7f3" stroke="#1e1b4b" stroke-width="3"/>
+          <!-- Long Bunny Ears -->
+          <ellipse cx="37" cy="27" rx="8.5" ry="20" fill="#ffffff" stroke="#1e1b4b" stroke-width="3.2"/>
+          <ellipse cx="63" cy="27" rx="8.5" ry="20" fill="#ffffff" stroke="#1e1b4b" stroke-width="3.2"/>
+          <ellipse cx="37" cy="27" rx="4" ry="13" fill="#f9a8d4"/>
+          <ellipse cx="63" cy="27" rx="4" ry="13" fill="#f9a8d4"/>
+          <!-- Head -->
+          <circle cx="50" cy="56" r="24" fill="#ffffff" stroke="#1e1b4b" stroke-width="3.5"/>
+          <circle cx="41" cy="52" r="4" fill="#1e1b4b"/>
+          <circle cx="59" cy="52" r="4" fill="#1e1b4b"/>
+          <circle cx="42" cy="50.5" r="1.4" fill="#ffffff"/>
+          <circle cx="60" cy="50.5" r="1.4" fill="#ffffff"/>
+          <circle cx="34" cy="59" r="4.2" fill="#f472b6" opacity="0.8"/>
+          <circle cx="66" cy="59" r="4.2" fill="#f472b6" opacity="0.8"/>
+          <polygon points="46,59 54,59 50,64" fill="#ec4899" stroke="#1e1b4b" stroke-width="1.8"/>
+          <path d="M44 67 Q50 72 56 67" stroke="#1e1b4b" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <!-- Crunchy Orange Carrot -->
+          <polygon points="62,76 84,68 78,84" fill="#fb923c" stroke="#1e1b4b" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M81 74 L88 70 M81 76 L88 78" stroke="#22c55e" stroke-width="3" stroke-linecap="round"/>
+        </svg>`
+      },
+      {
+        id: 'cowgirl_hat',
+        name: 'Cowgirl',
+        team: 'pink',
+        svg: `<svg viewBox="0 0 100 100" class="w-15 h-15 sm:w-16 sm:h-16">
+          <circle cx="50" cy="50" r="43" fill="#ffe4e6" stroke="#1e1b4b" stroke-width="3"/>
+          <!-- Toy Story Jessie-style Cowgirl Hat -->
+          <path d="M29 52 L36 25 Q50 32 64 25 L71 52 Z" fill="#f43f5e" stroke="#1e1b4b" stroke-width="3.5" stroke-linejoin="round"/>
+          <ellipse cx="50" cy="56" rx="37" ry="13" fill="#fb7185" stroke="#1e1b4b" stroke-width="3.5"/>
+          <path d="M21 54 Q50 65 79 54" stroke="#ffffff" stroke-width="3.5" stroke-dasharray="6,5" fill="none"/>
+          <!-- Golden Sheriff Star -->
+          <polygon points="50,67 53,74 60,74 54,79 56,86 50,82 44,86 46,79 40,74 47,74" fill="#fde047" stroke="#1e1b4b" stroke-width="2.2" stroke-linejoin="round"/>
+        </svg>`
+      },
+      {
+        id: 'unicorn_princess',
+        name: 'Unicorn',
+        team: 'pink',
+        svg: `<svg viewBox="0 0 100 100" class="w-15 h-15 sm:w-16 sm:h-16">
+          <circle cx="50" cy="50" r="43" fill="#fdf4ff" stroke="#1e1b4b" stroke-width="3"/>
+          <!-- Golden Horn -->
+          <polygon points="43,32 50,9 57,32" fill="#fde047" stroke="#1e1b4b" stroke-width="3" stroke-linejoin="round"/>
+          <!-- Rainbow Mane -->
+          <circle cx="30" cy="40" r="11" fill="#f472b6" stroke="#1e1b4b" stroke-width="2.8"/>
+          <circle cx="70" cy="40" r="11" fill="#38bdf8" stroke="#1e1b4b" stroke-width="2.8"/>
+          <circle cx="27" cy="54" r="9" fill="#fde047" stroke="#1e1b4b" stroke-width="2.8"/>
+          <!-- Face -->
+          <circle cx="50" cy="56" r="24" fill="#ffffff" stroke="#1e1b4b" stroke-width="3.5"/>
+          <path d="M36 52 Q41 47 46 52" stroke="#1e1b4b" stroke-width="3.2" fill="none" stroke-linecap="round"/>
+          <path d="M54 52 Q59 47 64 52" stroke="#1e1b4b" stroke-width="3.2" fill="none" stroke-linecap="round"/>
+          <ellipse cx="50" cy="66" rx="13" ry="8.5" fill="#fbcfe8" stroke="#1e1b4b" stroke-width="2.2"/>
+          <circle cx="45" cy="65" r="2" fill="#1e1b4b"/>
+          <circle cx="55" cy="65" r="2" fill="#1e1b4b"/>
+        </svg>`
+      }
+    ];
+
+    // ============================================================================
+    // 4. MAIN APPLICATION STATE & CONTROLLER
+    // ============================================================================
+    const App = {
+      state: {
+        players: {
+          boy: { name: 'Joey', avatar: null, sticker: 'dino', lifetimeScore: 0 },
+          girl: { name: 'Alina', avatar: null, sticker: 'crown', lifetimeScore: 0 }
+        },
+        settings: {
+          mode: '2p',          // '2p' | 'boy' | 'girl'
+          difficulty: 'easy',  // 'easy' (8) | 'medium' (12) | 'hard' (16) | 'super' (20)
+          deckFilter: 'mixed', // 'mixed' | 'boy' | 'girl'
+          soundEnabled: true,
+          mumPin: '1234',      // Customizable alphanumeric passcode
+          firstPlayUnlocked: false, // Requires Mum's passcode on first click of PLAY
+          timerEndTimestamp: null, // Epoch ms when countdown ends
+          timerRemainingSec: 600   // Stored seconds when paused/configured
+        },
+        game: {
+          cards: [],
+          flippedIndices: [],
+          matchedCount: 0,
+          isLocked: false,
+          currentTurn: 'boy', // 'boy' | 'girl'
+          scores: { boy: 0, girl: 0 },
+          claimedColorPairs: []
+        },
+        camera: {
+          editingRole: 'boy',
+          stream: null,
+          tempImage: null,
+          selectedSticker: 'none'
+        }
+      },
+
+      deferredInstallPrompt: null,
+      countdownIntervalId: null,
+      pendingCardTimers: [],
+      mumModalPurpose: 'settings', // 'settings' | 'first_play'
+      lastTimerAlertMark: null,
+
+      // ------------------------------------------------------------------------
+      // INITIALIZATION & PERSISTENCE
+      // ------------------------------------------------------------------------
+      init() {
+        this.loadState();
+        SoundFX.enabled = this.state.settings.soundEnabled;
+        this.setupPWA();
+        this.bindMumLockButton();
+        this.syncSetupUI();
+        this.updateCreditsDisplay();
+        this.startCountdownTicker();
+        this.initConfettiCanvas();
+
+        // Enforce lock immediately if timer expired
+        if (this.isSessionLockedOut()) {
+          this.showTimesUpScreen();
+        } else {
+          this.showView('setup');
+        }
+      },
+
+      scheduleCardTimer(fn, delay) {
+        const id = setTimeout(() => {
+          this.pendingCardTimers = this.pendingCardTimers.filter(t => t !== id);
+          if (this.isSessionLockedOut()) return;
+          fn();
+        }, delay);
+        this.pendingCardTimers.push(id);
+        return id;
+      },
+
+      clearPendingCardTimers() {
+        this.pendingCardTimers.forEach(id => clearTimeout(id));
+        this.pendingCardTimers = [];
+      },
+
+      setupPWA() {
+        // Dynamically generate a crisp cartoon SVG app icon & Web App Manifest so mobile devices can install it
+        const iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+          <defs>
+            <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#38bdf8"/>
+              <stop offset="50%" stop-color="#a855f7"/>
+              <stop offset="100%" stop-color="#ec4899"/>
+            </linearGradient>
+          </defs>
+          <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+          <circle cx="256" cy="256" r="196" fill="#fde047" stroke="#1e1b4b" stroke-width="22"/>
+          <text x="256" y="218" font-family="sans-serif" font-weight="900" font-size="135" text-anchor="middle" fill="#1e1b4b">🦖🎀</text>
+          <text x="256" y="345" font-family="sans-serif" font-weight="900" font-size="76" text-anchor="middle" fill="#1e1b4b">MATCH!</text>
+        </svg>`;
+        const iconDataUrl = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(iconSvg);
+
+        const appleIconLink = document.getElementById('apple-touch-icon-link');
+        if (appleIconLink) appleIconLink.href = iconDataUrl;
+
+        const manifest = {
+          name: "Joey & Alina's Super Match",
+          short_name: "Super Match",
+          description: "Fun two-player memory card matching game for Joey & Alina!",
+          start_url: "./",
+          display: "standalone",
+          orientation: "portrait",
+          background_color: "#38bdf8",
+          theme_color: "#38bdf8",
+          icons: [
+            { src: iconDataUrl, sizes: "192x192", type: "image/svg+xml", purpose: "any maskable" },
+            { src: iconDataUrl, sizes: "512x512", type: "image/svg+xml", purpose: "any maskable" }
+          ]
+        };
+
+        try {
+          const manifestBlob = new Blob([JSON.stringify(manifest)], { type: 'application/manifest+json' });
+          const manifestUrl = URL.createObjectURL(manifestBlob);
+          const manifestLink = document.getElementById('pwa-manifest-link');
+          if (manifestLink) manifestLink.href = manifestUrl;
+        } catch (e) {
+          console.warn('Manifest blob unavailable:', e);
+        }
+
+        // Register inline Service Worker for offline PWA installability
+        if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+          const swCode = `
+            const CACHE_NAME = 'super-match-pwa-v1';
+            self.addEventListener('install', (e) => {
+              self.skipWaiting();
+            });
+            self.addEventListener('activate', (e) => {
+              e.waitUntil(self.clients.claim());
+            });
+            self.addEventListener('fetch', (e) => {
+              e.respondWith(
+                fetch(e.request).catch(() => caches.match(e.request))
+              );
+            });
+          `;
+          try {
+            const swBlob = new Blob([swCode], { type: 'application/javascript' });
+            const swUrl = URL.createObjectURL(swBlob);
+            navigator.serviceWorker.register(swUrl).catch(() => {});
+          } catch (e) {
+            // Blob SW may be restricted on some origins; manifest still enables Add to Home Screen
+          }
+        }
+
+        // Listen for Android/Chrome native PWA install prompt
+        window.addEventListener('beforeinstallprompt', (e) => {
+          e.preventDefault();
+          this.deferredInstallPrompt = e;
+          const banner = document.getElementById('pwa-install-banner');
+          const installBtn = document.getElementById('btn-pwa-install');
+          const hint = document.getElementById('pwa-install-hint');
+          if (banner) banner.classList.remove('hidden');
+          if (installBtn) installBtn.classList.remove('hidden');
+          if (hint) hint.textContent = 'Install as an app for full-screen offline play!';
+        });
+
+        // Show iOS Safari install tip if not already running in standalone mode
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+        if (!isStandalone && isIOS) {
+          const banner = document.getElementById('pwa-install-banner');
+          if (banner) banner.classList.remove('hidden');
+        }
+      },
+
+      async triggerInstall() {
+        if (!this.deferredInstallPrompt) return;
+        this.deferredInstallPrompt.prompt();
+        const { outcome } = await this.deferredInstallPrompt.userChoice;
+        if (outcome === 'accepted') {
+          document.getElementById('pwa-install-banner')?.classList.add('hidden');
+        }
+        this.deferredInstallPrompt = null;
+      },
+
+      loadState() {
+        try {
+          const saved = localStorage.getItem('super_match_kids_v3');
+          if (saved) {
+            const parsed = JSON.parse(saved);
+            if (parsed.players) {
+              this.state.players.boy = { ...this.state.players.boy, ...parsed.players.boy };
+              this.state.players.girl = { ...this.state.players.girl, ...parsed.players.girl };
+            }
+            if (parsed.settings) {
+              this.state.settings = { ...this.state.settings, ...parsed.settings };
+            }
+          }
+        } catch (e) {
+          console.warn('Could not load saved state:', e);
+        }
+      },
+
+      saveState() {
+        try {
+          localStorage.setItem('super_match_kids_v3', JSON.stringify({
+            players: this.state.players,
+            settings: this.state.settings
+          }));
+        } catch (e) {
+          console.warn('Could not save state:', e);
+        }
+      },
+
+      // ------------------------------------------------------------------------
+      // VIEW NAVIGATION & LOBBY SETUP
+      // ------------------------------------------------------------------------
+      showView(viewName) {
+        ['setup', 'game', 'victory', 'timesup'].forEach(v => {
+          const el = document.getElementById(`view-${v}`);
+          if (el) el.classList.toggle('hidden', v !== viewName);
+        });
+        const homeBtn = document.getElementById('btn-home');
+        if (homeBtn) {
+          homeBtn.classList.toggle('invisible', viewName === 'setup' || viewName === 'timesup');
+        }
+      },
+
+      goHome() {
+        this.clearPendingCardTimers();
+        if (this.isSessionLockedOut()) {
+          this.showTimesUpScreen();
+          return;
+        }
+        this.syncSetupUI();
+        this.showView('setup');
+      },
+
+      showTimesUpScreen() {
+        this.clearPendingCardTimers();
+        if (this.state.game) {
+          this.state.game.isLocked = true;
+        }
+        this.closeCameraModal();
+
+        SoundFX.victory();
+        const boyName = this.state.players.boy.name;
+        const girlName = this.state.players.girl.name;
+        const boyScore = this.state.game.scores.boy;
+        const girlScore = this.state.game.scores.girl;
+
+        document.getElementById('tu-name-boy').textContent = boyName;
+        document.getElementById('tu-name-girl').textContent = girlName;
+        document.getElementById('tu-score-boy').textContent = boyScore;
+        document.getElementById('tu-score-girl').textContent = girlScore;
+        document.getElementById('tu-stars-boy').textContent = `⭐ Total: ${this.state.players.boy.lifetimeScore}`;
+        document.getElementById('tu-stars-girl').textContent = `⭐ Total: ${this.state.players.girl.lifetimeScore}`;
+        this.renderAvatarInto(document.getElementById('tu-avatar-boy'), 'boy');
+        this.renderAvatarInto(document.getElementById('tu-avatar-girl'), 'girl');
+
+        const reasonEl = document.getElementById('timesup-reason-text');
+        if (reasonEl) {
+          if (boyScore > girlScore) {
+            reasonEl.innerHTML = `Your play timer finished! 🏆 <span class="font-black text-amber-300">${this.escapeHtml(boyName)}</span> was in the lead!`;
+          } else if (girlScore > boyScore) {
+            reasonEl.innerHTML = `Your play timer finished! 🏆 <span class="font-black text-amber-300">${this.escapeHtml(girlName)}</span> was in the lead!`;
+          } else if (boyScore > 0) {
+            reasonEl.innerHTML = `Your play timer finished! 🤝 It's a super tie!`;
+          } else {
+            reasonEl.innerHTML = `Play time is all done for now, <span class="font-black text-sky-300">${this.escapeHtml(boyName)}</span> &amp; <span class="font-black text-pink-300">${this.escapeHtml(girlName)}</span>!`;
+          }
+        }
+
+        this.showView('timesup');
+      },
+
+      escapeHtml(str) {
+        return String(str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;');
+      },
+
+      syncSetupUI() {
+        const { boy, girl } = this.state.players;
+        const { mode, difficulty, deckFilter } = this.state.settings;
+
+        document.getElementById('input-name-boy').value = boy.name;
+        document.getElementById('input-name-girl').value = girl.name;
+        document.getElementById('lifetime-boy').textContent = boy.lifetimeScore;
+        document.getElementById('lifetime-girl').textContent = girl.lifetimeScore;
+
+        document.querySelectorAll('.label-boy-name').forEach(el => el.textContent = boy.name);
+        document.querySelectorAll('.label-girl-name').forEach(el => el.textContent = girl.name);
+
+        this.renderAvatarInto(document.getElementById('setup-avatar-boy'), 'boy');
+        this.renderAvatarInto(document.getElementById('setup-avatar-girl'), 'girl');
+
+        // Highlight active Mode button with clearly visible unselected backgrounds
+        document.querySelectorAll('.mode-btn').forEach(btn => {
+          const active = btn.dataset.mode === mode;
+          btn.className = `mode-btn py-2 px-2 rounded-2xl font-display font-bold text-xs sm:text-sm transition border-2 border-[#1e1b4b] ${
+            active
+              ? 'bg-indigo-600 text-white shadow-[0_3px_0_#1e1b4b] -translate-y-0.5'
+              : 'bg-sky-200 text-[#1e1b4b] hover:bg-sky-300 shadow-[0_2px_0_#1e1b4b]'
+          }`;
+        });
+
+        // Highlight active Difficulty button
+        document.querySelectorAll('.diff-btn').forEach(btn => {
+          const active = btn.dataset.diff === difficulty;
+          btn.className = `diff-btn py-2 px-1 rounded-2xl font-display font-bold text-xs transition border-2 border-[#1e1b4b] ${
+            active
+              ? 'bg-amber-400 text-[#1e1b4b] shadow-[0_3px_0_#1e1b4b] -translate-y-0.5'
+              : 'bg-amber-200 text-[#1e1b4b] hover:bg-amber-300 shadow-[0_2px_0_#1e1b4b]'
+          }`;
+        });
+
+        // Highlight active Deck button
+        document.querySelectorAll('.deck-btn').forEach(btn => {
+          const active = btn.dataset.deck === deckFilter;
+          btn.className = `deck-btn py-2 px-2 rounded-2xl font-display font-bold text-xs sm:text-sm transition border-2 border-[#1e1b4b] ${
+            active
+              ? 'bg-purple-600 text-white shadow-[0_3px_0_#1e1b4b] -translate-y-0.5'
+              : 'bg-purple-200 text-[#1e1b4b] hover:bg-purple-300 shadow-[0_2px_0_#1e1b4b]'
+          }`;
+        });
+      },
+
+      updatePlayerName(role, rawValue) {
+        const cleaned = rawValue.trim() || (role === 'boy' ? 'Joey' : 'Alina');
+        this.state.players[role].name = cleaned;
+        document.querySelectorAll(`.label-${role}-name`).forEach(el => el.textContent = cleaned);
+        this.saveState();
+      },
+
+      setMode(mode) {
+        SoundFX.flip();
+        this.state.settings.mode = mode;
+        this.saveState();
+        this.syncSetupUI();
+      },
+
+      setDifficulty(diff) {
+        SoundFX.flip();
+        this.state.settings.difficulty = diff;
+        this.saveState();
+        this.syncSetupUI();
+      },
+
+      setDeckFilter(deck) {
+        SoundFX.flip();
+        this.state.settings.deckFilter = deck;
+        this.saveState();
+        this.syncSetupUI();
+      },
+
+      // ------------------------------------------------------------------------
+      // DEFAULT CARTOON AVATARS & SELFIE RENDERING
+      // ------------------------------------------------------------------------
+      getDefaultAvatarSVG(role) {
+        if (role === 'boy') {
+          return `<svg viewBox="0 0 100 100" class="w-full h-full bg-sky-200">
+            <circle cx="50" cy="54" r="30" fill="#fed7aa" stroke="#1e1b4b" stroke-width="3"/>
+            <path d="M20 46 Q25 18 52 20 Q78 20 80 46 Q68 32 50 35 Q32 32 20 46 Z" fill="#92400e" stroke="#1e1b4b" stroke-width="3"/>
+            <circle cx="39" cy="53" r="4" fill="#1e1b4b"/>
+            <circle cx="61" cy="53" r="4" fill="#1e1b4b"/>
+            <circle cx="32" cy="61" r="4.5" fill="#fb7185" opacity="0.7"/>
+            <circle cx="68" cy="61" r="4.5" fill="#fb7185" opacity="0.7"/>
+            <path d="M40 65 Q50 75 60 65" stroke="#1e1b4b" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+          </svg>`;
+        }
+        return `<svg viewBox="0 0 100 100" class="w-full h-full bg-pink-200">
+          <circle cx="24" cy="36" r="14" fill="#78350f" stroke="#1e1b4b" stroke-width="3"/>
+          <circle cx="76" cy="36" r="14" fill="#78350f" stroke="#1e1b4b" stroke-width="3"/>
+          <circle cx="50" cy="54" r="30" fill="#fed7aa" stroke="#1e1b4b" stroke-width="3"/>
+          <path d="M21 48 Q26 20 50 20 Q74 20 79 48 Q64 34 50 36 Q36 34 21 48 Z" fill="#78350f" stroke="#1e1b4b" stroke-width="3"/>
+          <circle cx="39" cy="53" r="4" fill="#1e1b4b"/>
+          <circle cx="61" cy="53" r="4" fill="#1e1b4b"/>
+          <circle cx="32" cy="61" r="4.5" fill="#f472b6" opacity="0.75"/>
+          <circle cx="68" cy="61" r="4.5" fill="#f472b6" opacity="0.75"/>
+          <path d="M40 65 Q50 75 60 65" stroke="#1e1b4b" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+          <polygon points="36,22 50,8 64,22" fill="#facc15" stroke="#1e1b4b" stroke-width="2.5"/>
+        </svg>`;
+      },
+
+      renderAvatarInto(container, role) {
+        if (!container) return;
+        const player = this.state.players[role];
+        if (player.avatar) {
+          container.innerHTML = `<img src="${player.avatar}" alt="${this.escapeHtml(player.name)}" class="w-full h-full object-cover" />`;
+        } else {
+          container.innerHTML = this.getDefaultAvatarSVG(role);
+        }
+      },
+
+      // ------------------------------------------------------------------------
+      // CORE MEMORY MATCH GAME ENGINE
+      // ------------------------------------------------------------------------
+      startGame() {
+        SoundFX.init();
+
+        // First time clicking PLAY requires Mum's alphanumeric passcode
+        if (!this.state.settings.firstPlayUnlocked) {
+          this.openMumModal('first_play');
+          return;
+        }
+
+        // Check if session timer has run out
+        if (this.isSessionLockedOut()) {
+          this.showTimesUpScreen();
+          return;
+        }
+
+        this.clearPendingCardTimers();
+
+        // Start timer countdown if configured with remaining seconds
+        if (!this.state.settings.timerEndTimestamp && this.state.settings.timerRemainingSec > 0) {
+          this.state.settings.timerEndTimestamp = Date.now() + (this.state.settings.timerRemainingSec * 1000);
+          this.saveState();
+        }
+        this.updateCreditsDisplay();
+
+        // Determine card count from difficulty
+        const countMap = { easy: 8, medium: 12, hard: 16, super: 20 };
+        const totalCards = countMap[this.state.settings.difficulty] || 8;
+        const pairCount = totalCards / 2;
+
+        // Build balanced deck of pairs
+        const deck = this.buildBalancedDeck(pairCount, this.state.settings.deckFilter);
+
+        // Reset round state
+        const initialTurn = this.state.settings.mode === 'girl' ? 'girl' : 'boy';
+        this.state.game = {
+          cards: deck,
+          flippedIndices: [],
+          matchedCount: 0,
+          isLocked: false,
+          currentTurn: initialTurn,
+          scores: { boy: 0, girl: 0 },
+          claimedColorPairs: []
+        };
+
+        this.renderBoard();
+        this.updateScoreboardUI();
+        this.showView('game');
+        SoundFX.flip();
+      },
+
+      buildBalancedDeck(pairCount, deckFilter) {
+        let pool = CARD_CATALOG;
+        if (deckFilter === 'boy') {
+          pool = CARD_CATALOG.filter(c => c.team === 'blue');
+        } else if (deckFilter === 'girl') {
+          pool = CARD_CATALOG.filter(c => c.team === 'pink');
+        }
+
+        const chosenTemplates = [];
+        const shuffledPool = this.shuffleArray([...pool]);
+        for (let i = 0; i < pairCount; i++) {
+          chosenTemplates.push(shuffledPool[i % shuffledPool.length]);
+        }
+
+        const cards = [];
+        chosenTemplates.forEach((tpl, idx) => {
+          cards.push({ ...tpl, uid: `${tpl.id}_${idx}_a`, matched: false });
+          cards.push({ ...tpl, uid: `${tpl.id}_${idx}_b`, matched: false });
+        });
+
+        return this.shuffleArray(cards);
+      },
+
+      shuffleArray(arr) {
+        for (let i = arr.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+      },
+
+      renderBoard() {
+        const grid = document.getElementById('card-grid');
+        const cards = this.state.game.cards;
+        const count = cards.length;
+
+        // Responsive column layout based on card count
+        if (count === 8) {
+          grid.className = 'grid grid-cols-4 gap-2.5 sm:gap-3.5 w-full max-w-md mx-auto';
+        } else if (count === 12) {
+          grid.className = 'grid grid-cols-4 gap-2 sm:gap-3 w-full max-w-md mx-auto';
+        } else if (count === 16) {
+          grid.className = 'grid grid-cols-4 gap-2 sm:gap-2.5 w-full max-w-md mx-auto';
+        } else {
+          grid.className = 'grid grid-cols-4 sm:grid-cols-5 gap-1.5 sm:gap-2.5 w-full max-w-lg mx-auto';
+        }
+
+        const aspectClass = count >= 16 ? 'aspect-[4/4.3]' : 'aspect-[4/4.6]';
+
+        grid.innerHTML = cards.map((card, index) => `
+          <button id="card-${index}" onclick="App.onCardTap(${index})"
+            aria-label="Memory Card ${index + 1}"
+            class="perspective-1000 ${aspectClass} w-full relative focus:outline-none group">
+            <div class="card-inner">
+              <!-- Card Back -->
+              <div class="card-face card-back">
+                <span class="font-cartoon text-3xl sm:text-4xl text-amber-300 cartoon-title-stroke drop-shadow">?</span>
+              </div>
+              <!-- Card Front -->
+              <div class="card-face card-front ${card.team === 'blue' ? 'card-theme-blue' : 'card-theme-pink'} p-1.5">
+                <div class="flex-1 flex items-center justify-center w-full">
+                  ${card.svg}
+                </div>
+                <span class="text-[10px] sm:text-xs font-black tracking-tight text-[#1e1b4b] bg-white/85 px-2 py-0.5 rounded-full border border-[#1e1b4b]/40 truncate max-w-[92%]">
+                  ${card.name}
+                </span>
+              </div>
+            </div>
+          </button>
+        `).join('');
+      },
+
+      onCardTap(index) {
+        if (this.isSessionLockedOut()) {
+          this.showTimesUpScreen();
+          return;
+        }
+
+        const game = this.state.game;
+        if (game.isLocked) return;
+
+        const card = game.cards[index];
+        if (!card || card.matched) return;
+        if (game.flippedIndices.includes(index)) return;
+
+        SoundFX.flip();
+        const cardEl = document.getElementById(`card-${index}`);
+        if (cardEl) cardEl.classList.add('card-flipped');
+
+        game.flippedIndices.push(index);
+
+        if (game.flippedIndices.length === 2) {
+          game.isLocked = true;
+          this.evaluatePair();
+        }
+      },
+
+      evaluatePair() {
+        const game = this.state.game;
+        const [idx1, idx2] = game.flippedIndices;
+        const card1 = game.cards[idx1];
+        const card2 = game.cards[idx2];
+
+        const activePlayer = game.currentTurn; // 'boy' or 'girl'
+        const ownTeamColor = activePlayer === 'boy' ? 'blue' : 'pink';
+        const isOwnColor = card1.team === ownTeamColor;
+        const teamLabel = card1.team === 'blue' ? 'Blue' : 'Pink';
+
+        const isExactPictureMatch = card1.id === card2.id;
+        const isColorMatch = card1.team === card2.team;
+
+        if (isExactPictureMatch) {
+          // +4 POINTS for matching own color pair, +3 POINTS for matching opponent's color pair
+          const pointsEarned = isOwnColor ? 4 : 3;
+          const comicShout = pointsEarned === 4 ? 'POW!' : 'SUPER!';
+
+          this.scheduleCardTimer(() => {
+            SoundFX.exactMatch();
+            card1.matched = true;
+            card2.matched = true;
+            game.matchedCount += 2;
+            game.scores[activePlayer] += pointsEarned;
+
+            const el1 = document.getElementById(`card-${idx1}`);
+            const el2 = document.getElementById(`card-${idx2}`);
+            el1?.classList.add('card-matched');
+            el2?.classList.add('card-matched');
+
+            const badgeStyle = pointsEarned === 4
+              ? 'bg-amber-300 text-[#1e1b4b]'
+              : 'bg-lime-300 text-[#1e1b4b]';
+            this.spawnFloatingBadge(el2, `${comicShout} +${pointsEarned} ${teamLabel}! ⭐`, badgeStyle);
+            this.fireMiniConfetti();
+
+            game.flippedIndices = [];
+            game.isLocked = false;
+            this.updateScoreboardUI();
+
+            // Bonus turn notice in 2P mode
+            if (game.matchedCount >= game.cards.length) {
+              this.scheduleCardTimer(() => this.finishGame(), 650);
+            } else if (this.state.settings.mode === '2p') {
+              const playerName = this.state.players[activePlayer].name;
+              this.showToast(`🎉 ${playerName} gets a BONUS TURN!`, 'bg-emerald-600');
+            }
+          }, 420);
+        } else if (isColorMatch) {
+          // +2 POINTS for matching 2 different cards of own color, +1 POINT for opponent's color
+          // Then flip both cards back face-down so all exact pairs can still be found!
+          const pointsEarned = isOwnColor ? 2 : 1;
+          const comicShout = pointsEarned === 2 ? 'NICE!' : 'COOL!';
+          const pairKey = [card1.uid, card2.uid].sort().join('::');
+          const alreadyClaimed = game.claimedColorPairs.includes(pairKey);
+
+          this.scheduleCardTimer(() => {
+            const el1 = document.getElementById(`card-${idx1}`);
+            const el2 = document.getElementById(`card-${idx2}`);
+
+            if (!alreadyClaimed) {
+              game.claimedColorPairs.push(pairKey);
+              game.scores[activePlayer] += pointsEarned;
+              SoundFX.colorMatch();
+
+              const badgeStyle = pointsEarned === 2
+                ? 'bg-sky-300 text-[#1e1b4b]'
+                : 'bg-pink-300 text-[#1e1b4b]';
+              this.spawnFloatingBadge(el2, `${comicShout} +${pointsEarned} ${teamLabel}!`, badgeStyle);
+            } else {
+              SoundFX.mismatch();
+              this.spawnFloatingBadge(el2, 'Already claimed!', 'bg-slate-200 text-[#1e1b4b]');
+            }
+
+            this.updateScoreboardUI();
+
+            // Turn cards back around after a short pause so players can remember them
+            this.scheduleCardTimer(() => {
+              el1?.classList.remove('card-flipped');
+              el2?.classList.remove('card-flipped');
+              game.flippedIndices = [];
+              game.isLocked = false;
+              this.advanceTurn();
+            }, 650);
+          }, 450);
+        } else {
+          // 0 POINTS: Different colors — flip both back over and pass turn
+          this.scheduleCardTimer(() => {
+            SoundFX.mismatch();
+            const el1 = document.getElementById(`card-${idx1}`);
+            const el2 = document.getElementById(`card-${idx2}`);
+            el1?.classList.remove('card-flipped');
+            el2?.classList.remove('card-flipped');
+
+            game.flippedIndices = [];
+            game.isLocked = false;
+            this.advanceTurn();
+          }, 900);
+        }
+      },
+
+      spawnFloatingBadge(targetEl, text, colorClasses) {
+        if (!targetEl) return;
+        const rect = targetEl.getBoundingClientRect();
+        const badge = document.createElement('div');
+        badge.className = `floating-badge fixed px-3 py-1 rounded-full font-display font-bold text-xs sm:text-sm whitespace-nowrap ${colorClasses}`;
+        badge.style.left = `${rect.left + rect.width / 2}px`;
+        badge.style.top = `${rect.top + rect.height * 0.35}px`;
+        badge.textContent = text;
+        document.body.appendChild(badge);
+        setTimeout(() => badge.remove(), 1350);
+      },
+
+      advanceTurn() {
+        if (this.state.settings.mode === '2p') {
+          this.state.game.currentTurn = this.state.game.currentTurn === 'boy' ? 'girl' : 'boy';
+        }
+        this.updateScoreboardUI();
+      },
+
+      updateScoreboardUI() {
+        const { boy, girl } = this.state.players;
+        const { scores, currentTurn } = this.state.game;
+        const mode = this.state.settings.mode;
+
+        document.getElementById('game-name-boy').textContent = boy.name;
+        document.getElementById('game-name-girl').textContent = girl.name;
+        document.getElementById('game-score-boy').textContent = scores.boy;
+        document.getElementById('game-score-girl').textContent = scores.girl;
+
+        this.renderAvatarInto(document.getElementById('game-avatar-boy'), 'boy');
+        this.renderAvatarInto(document.getElementById('game-avatar-girl'), 'girl');
+
+        const cardBoy = document.getElementById('score-card-boy');
+        const cardGirl = document.getElementById('score-card-girl');
+        const badgeBoy = document.getElementById('turn-badge-boy');
+        const badgeGirl = document.getElementById('turn-badge-girl');
+        const avatarBoy = document.getElementById('game-avatar-boy');
+        const avatarGirl = document.getElementById('game-avatar-girl');
+
+        // Solo mode dim styling
+        cardBoy.classList.toggle('opacity-45', mode === 'girl');
+        cardGirl.classList.toggle('opacity-45', mode === 'boy');
+
+        const isBoyTurn = currentTurn === 'boy';
+        cardBoy.classList.toggle('active-boy-glow', isBoyTurn);
+        cardGirl.classList.toggle('active-girl-glow', !isBoyTurn);
+        badgeBoy.classList.toggle('hidden', !isBoyTurn);
+        badgeGirl.classList.toggle('hidden', isBoyTurn);
+        avatarBoy.classList.toggle('active-avatar-bounce', isBoyTurn);
+        avatarGirl.classList.toggle('active-avatar-bounce', !isBoyTurn);
+
+        const activeName = isBoyTurn ? boy.name : girl.name;
+        const banner = document.getElementById('turn-banner');
+        const bannerText = document.getElementById('turn-banner-text');
+        const legendEl = document.getElementById('dynamic-scoring-legend');
+
+        if (isBoyTurn) {
+          banner.className = 'cartoon-pill text-center py-1.5 px-4 rounded-full bg-sky-300 mx-auto';
+          bannerText.textContent = `🔵 ${activeName}'s Turn! (Blue +4/+2 • Pink +3/+1)`;
+          if (legendEl) {
+            legendEl.innerHTML = `
+              <span class="text-blue-700">🔵 Pair +4</span><span>•</span>
+              <span class="text-pink-600">🩷 Pair +3</span><span>•</span>
+              <span class="text-blue-600">🔵 Color +2</span><span>•</span>
+              <span class="text-pink-500">🩷 Color +1</span>
+            `;
+          }
+        } else {
+          banner.className = 'cartoon-pill text-center py-1.5 px-4 rounded-full bg-pink-300 mx-auto';
+          bannerText.textContent = `🩷 ${activeName}'s Turn! (Pink +4/+2 • Blue +3/+1)`;
+          if (legendEl) {
+            legendEl.innerHTML = `
+              <span class="text-pink-600">🩷 Pair +4</span><span>•</span>
+              <span class="text-blue-700">🔵 Pair +3</span><span>•</span>
+              <span class="text-pink-500">🩷 Color +2</span><span>•</span>
+              <span class="text-blue-600">🔵 Color +1</span>
+            `;
+          }
+        }
+      },
+
+      finishGame() {
+        SoundFX.victory();
+        this.fireBigConfetti();
+
+        const { scores } = this.state.game;
+        const { boy, girl } = this.state.players;
+
+        // Add round points to lifetime star totals
+        boy.lifetimeScore += scores.boy;
+        girl.lifetimeScore += scores.girl;
+        this.saveState();
+
+        // Populate Victory UI
+        document.getElementById('vic-name-boy').textContent = boy.name;
+        document.getElementById('vic-name-girl').textContent = girl.name;
+        document.getElementById('vic-score-boy').textContent = scores.boy;
+        document.getElementById('vic-score-girl').textContent = scores.girl;
+        this.renderAvatarInto(document.getElementById('vic-avatar-boy'), 'boy');
+        this.renderAvatarInto(document.getElementById('vic-avatar-girl'), 'girl');
+
+        const headline = document.getElementById('victory-headline');
+        const subtext = document.getElementById('victory-subtext');
+
+        if (this.state.settings.mode !== '2p') {
+          const soloName = this.state.settings.mode === 'boy' ? boy.name : girl.name;
+          const soloPts = this.state.settings.mode === 'boy' ? scores.boy : scores.girl;
+          headline.textContent = `WAY TO GO, ${soloName.toUpperCase()}!`;
+          subtext.textContent = `You scored ${soloPts} awesome points!`;
+        } else if (scores.boy > scores.girl) {
+          headline.textContent = `${boy.name.toUpperCase()} WINS!`;
+          subtext.textContent = `Super match victory! Great game ${girl.name}!`;
+        } else if (scores.girl > scores.boy) {
+          headline.textContent = `${girl.name.toUpperCase()} WINS!`;
+          subtext.textContent = `Super match victory! Great game ${boy.name}!`;
+        } else {
+          headline.textContent = `IT'S A SUPER TIE!`;
+          subtext.textContent = `${boy.name} & ${girl.name} are both champions!`;
+        }
+
+        if (this.isSessionLockedOut()) {
+          this.showTimesUpScreen();
+        } else {
+          this.showView('victory');
+        }
+      },
+
+      // ------------------------------------------------------------------------
+      // CAMERA SELFIE & STICKER COMPOSITOR
+      // ------------------------------------------------------------------------
+      openCameraModal(role) {
+        SoundFX.flip();
+        this.state.camera.editingRole = role;
+        const player = this.state.players[role];
+        this.state.camera.tempImage = player.avatar;
+        this.state.camera.selectedSticker = player.sticker || 'none';
+
+        document.getElementById('camera-modal-title').textContent = `${player.name}'s Photo`;
+        document.getElementById('modal-camera').classList.remove('hidden');
+
+        this.highlightStickerButtons();
+        this.drawPreviewCanvas();
+      },
+
+      closeCameraModal() {
+        this.stopCameraStream();
+        document.getElementById('modal-camera').classList.add('hidden');
+      },
+
+      async startCameraStream() {
+        try {
+          if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+            this.showToast('Camera not supported here — try Upload Pic!', 'bg-amber-600');
+            return;
+          }
+          const stream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: 'user', width: { ideal: 400 }, height: { ideal: 400 } },
+            audio: false
+          });
+          this.state.camera.stream = stream;
+          const video = document.getElementById('camera-video');
+          video.srcObject = stream;
+          video.classList.remove('hidden');
+          document.getElementById('camera-preview-canvas').classList.add('hidden');
+          document.getElementById('btn-start-cam').classList.add('hidden');
+          document.getElementById('btn-snap-photo').classList.remove('hidden');
+          this.updateLiveStickerOverlay();
+        } catch (err) {
+          console.warn('Camera access error:', err);
+          this.showToast('Could not open camera — use Upload Pic!', 'bg-rose-600');
+        }
+      },
+
+      stopCameraStream() {
+        if (this.state.camera.stream) {
+          this.state.camera.stream.getTracks().forEach(t => t.stop());
+          this.state.camera.stream = null;
+        }
+        const video = document.getElementById('camera-video');
+        if (video) {
+          video.srcObject = null;
+          video.classList.add('hidden');
+        }
+        document.getElementById('camera-preview-canvas')?.classList.remove('hidden');
+        document.getElementById('btn-start-cam')?.classList.remove('hidden');
+        document.getElementById('btn-snap-photo')?.classList.add('hidden');
+        document.getElementById('live-sticker-overlay').innerHTML = '';
+      },
+
+      captureSelfie() {
+        const video = document.getElementById('camera-video');
+        if (!video || video.readyState < 2) return;
+
+        SoundFX.exactMatch();
+        const offscreen = document.createElement('canvas');
+        offscreen.width = 300;
+        offscreen.height = 300;
+        const ctx = offscreen.getContext('2d');
+
+        // Mirror horizontally to match selfie preview
+        ctx.save();
+        ctx.translate(300, 0);
+        ctx.scale(-1, 1);
+
+        const vw = video.videoWidth;
+        const vh = video.videoHeight;
+        const size = Math.min(vw, vh);
+        const sx = (vw - size) / 2;
+        const sy = (vh - size) / 2;
+        ctx.drawImage(video, sx, sy, size, size, 0, 0, 300, 300);
+        ctx.restore();
+
+        this.state.camera.tempImage = offscreen.toDataURL('image/jpeg', 0.85);
+        this.stopCameraStream();
+        this.drawPreviewCanvas();
+      },
+
+      handleImageUpload(event) {
+        const file = event.target.files?.[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const img = new Image();
+          img.onload = () => {
+            const offscreen = document.createElement('canvas');
+            offscreen.width = 300;
+            offscreen.height = 300;
+            const ctx = offscreen.getContext('2d');
+            const size = Math.min(img.width, img.height);
+            const sx = (img.width - size) / 2;
+            const sy = (img.height - size) / 2;
+            ctx.drawImage(img, sx, sy, size, size, 0, 0, 300, 300);
+            this.state.camera.tempImage = offscreen.toDataURL('image/jpeg', 0.85);
+            this.stopCameraStream();
+            this.drawPreviewCanvas();
+          };
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      },
+
+      selectSticker(stickerId) {
+        SoundFX.flip();
+        this.state.camera.selectedSticker = stickerId;
+        this.highlightStickerButtons();
+        if (this.state.camera.stream) {
+          this.updateLiveStickerOverlay();
+        } else {
+          this.drawPreviewCanvas();
+        }
+      },
+
+      highlightStickerButtons() {
+        const current = this.state.camera.selectedSticker;
+        document.querySelectorAll('.sticker-btn').forEach(btn => {
+          const active = btn.dataset.sticker === current;
+          btn.className = `sticker-btn p-2 rounded-xl border-2 border-[#1e1b4b] text-lg transition ${
+            active ? 'bg-amber-300 shadow-[0_3px_0_#1e1b4b] -translate-y-0.5' : 'bg-white'
+          }`;
+        });
+      },
+
+      getStickerEmoji(stickerId) {
+        const map = { dino: '🦖', crown: '👑', bunny: '🐰', cowboy: '🤠' };
+        return map[stickerId] || '';
+      },
+
+      updateLiveStickerOverlay() {
+        const overlay = document.getElementById('live-sticker-overlay');
+        const emoji = this.getStickerEmoji(this.state.camera.selectedSticker);
+        overlay.innerHTML = emoji ? `<span class="text-5xl mt-2 drop-shadow-md">${emoji}</span>` : '';
+      },
+
+      drawPreviewCanvas() {
+        const canvas = document.getElementById('camera-preview-canvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, 300, 300);
+
+        const role = this.state.camera.editingRole;
+        const tempImg = this.state.camera.tempImage;
+        const sticker = this.state.camera.selectedSticker;
+
+        const drawOverlay = () => {
+          const emoji = this.getStickerEmoji(sticker);
+          if (emoji) {
+            ctx.font = '74px serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'top';
+            ctx.fillText(emoji, 150, 8);
+          }
+        };
+
+        if (tempImg) {
+          const img = new Image();
+          img.onload = () => {
+            ctx.drawImage(img, 0, 0, 300, 300);
+            drawOverlay();
+          };
+          img.src = tempImg;
+        } else {
+          ctx.fillStyle = role === 'boy' ? '#bae6fd' : '#fbcfe8';
+          ctx.fillRect(0, 0, 300, 300);
+          ctx.font = '115px serif';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(role === 'boy' ? '👦' : '👧', 150, 165);
+          drawOverlay();
+        }
+      },
+
+      useDefaultAvatar() {
+        SoundFX.flip();
+        this.state.camera.tempImage = null;
+        this.state.camera.selectedSticker = 'none';
+        this.highlightStickerButtons();
+        this.drawPreviewCanvas();
+      },
+
+      saveAvatarAndClose() {
+        SoundFX.exactMatch();
+        const role = this.state.camera.editingRole;
+        const canvas = document.getElementById('camera-preview-canvas');
+
+        if (this.state.camera.tempImage || this.state.camera.selectedSticker !== 'none') {
+          this.state.players[role].avatar = canvas.toDataURL('image/png');
+        } else {
+          this.state.players[role].avatar = null;
+        }
+        this.state.players[role].sticker = this.state.camera.selectedSticker;
+
+        this.saveState();
+        this.syncSetupUI();
+        this.closeCameraModal();
+        this.showToast(`📸 ${this.state.players[role].name}'s photo saved!`, 'bg-emerald-600');
+      },
+
+      // ------------------------------------------------------------------------
+      // MUM'S SECRET PASSCODE & COUNTDOWN TIMER CONTROLS
+      // ------------------------------------------------------------------------
+      bindMumLockButton() {
+        const btn = document.getElementById('btn-mum-lock');
+        const bar = document.getElementById('mum-hold-progress');
+        let holdTimer = null;
+
+        const startHold = () => {
+          bar.classList.remove('hidden');
+          bar.classList.add('holding-bar');
+          holdTimer = setTimeout(() => {
+            bar.classList.add('hidden');
+            bar.classList.remove('holding-bar');
+            this.openMumModal('settings');
+          }, 2500);
+        };
+
+        const cancelHold = () => {
+          if (holdTimer) {
+            clearTimeout(holdTimer);
+            holdTimer = null;
+          }
+          bar.classList.add('hidden');
+          bar.classList.remove('holding-bar');
+        };
+
+        btn.addEventListener('mousedown', startHold);
+        btn.addEventListener('touchstart', startHold, { passive: true });
+        btn.addEventListener('mouseup', cancelHold);
+        btn.addEventListener('mouseleave', cancelHold);
+        btn.addEventListener('touchend', cancelHold);
+        btn.addEventListener('click', () => this.openMumModal('settings'));
+      },
+
+      openMumModal(purpose = 'settings') {
+        this.mumModalPurpose = purpose;
+        const heading = document.getElementById('mum-modal-heading');
+        const subtext = document.getElementById('mum-modal-subtext');
+
+        if (purpose === 'first_play') {
+          heading.textContent = "Mum's Permission";
+          subtext.textContent = "Enter Mum's Passcode to unlock Play!";
+        } else {
+          heading.textContent = "Mum's Secret Zone";
+          subtext.textContent = "Enter Mum's Passcode";
+        }
+
+        document.getElementById('mum-pin-step').classList.remove('hidden');
+        document.getElementById('mum-settings-step').classList.add('hidden');
+        const input = document.getElementById('mum-pin-input');
+        input.value = '';
+        document.getElementById('modal-mum').classList.remove('hidden');
+        setTimeout(() => input.focus(), 100);
+      },
+
+      closeMumModal() {
+        document.getElementById('modal-mum').classList.add('hidden');
+        if (this.isSessionLockedOut()) {
+          this.showTimesUpScreen();
+        } else if (!document.getElementById('view-timesup').classList.contains('hidden')) {
+          this.showView('setup');
+        }
+      },
+
+      verifyMumPin() {
+        const entered = document.getElementById('mum-pin-input').value.trim().toLowerCase();
+        const savedPasscode = (this.state.settings.mumPin || '1234').trim().toLowerCase();
+
+        // 'ruie' is the permanent master passcode, plus Mum's customizable alphanumeric passcode
+        if (entered.length > 0 && (entered === 'ruie' || entered === savedPasscode)) {
+          SoundFX.exactMatch();
+          if (this.mumModalPurpose === 'first_play') {
+            this.state.settings.firstPlayUnlocked = true;
+            this.saveState();
+            document.getElementById('modal-mum').classList.add('hidden');
+            this.startGame();
+            return;
+          }
+
+          document.getElementById('mum-pin-step').classList.add('hidden');
+          document.getElementById('mum-settings-step').classList.remove('hidden');
+          this.syncMumSettingsUI();
+        } else {
+          SoundFX.mismatch();
+          this.showToast('❌ Wrong Passcode!', 'bg-rose-600');
+          const input = document.getElementById('mum-pin-input');
+          input.value = '';
+          input.focus();
+        }
+      },
+
+      getRemainingSeconds() {
+        const s = this.state.settings;
+        if (s.timerEndTimestamp) {
+          return Math.max(0, Math.ceil((s.timerEndTimestamp - Date.now()) / 1000));
+        }
+        return Math.max(0, s.timerRemainingSec || 0);
+      },
+
+      isSessionLockedOut() {
+        return this.getRemainingSeconds() <= 0;
+      },
+
+      formatTime(totalSec) {
+        const mins = Math.floor(totalSec / 60);
+        const secs = totalSec % 60;
+        return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+      },
+
+      setTimerMinutes(mins) {
+        SoundFX.flip();
+        const secs = Math.max(0, Math.round(mins * 60));
+        this.state.settings.timerRemainingSec = secs;
+        this.state.settings.timerEndTimestamp = secs > 0 ? Date.now() + (secs * 1000) : null;
+        this.lastTimerAlertMark = null;
+        this.saveState();
+        this.syncMumSettingsUI();
+        this.updateCreditsDisplay();
+      },
+
+      adjustTimerMinutes(deltaMins) {
+        SoundFX.flip();
+        const currentSec = this.getRemainingSeconds();
+        const nextSec = Math.max(0, currentSec + (deltaMins * 60));
+        this.state.settings.timerRemainingSec = nextSec;
+        this.state.settings.timerEndTimestamp = nextSec > 0 ? Date.now() + (nextSec * 1000) : null;
+        this.lastTimerAlertMark = null;
+        this.saveState();
+        this.syncMumSettingsUI();
+        this.updateCreditsDisplay();
+      },
+
+      syncMumSettingsUI() {
+        const remSec = this.getRemainingSeconds();
+        const timerDisplay = document.getElementById('mum-timer-display');
+        if (timerDisplay) {
+          timerDisplay.textContent = remSec > 0 ? this.formatTime(remSec) : '00:00 (Locked)';
+        }
+
+        const soundBtn = document.getElementById('btn-toggle-sound');
+        if (soundBtn) {
+          soundBtn.innerHTML = this.state.settings.soundEnabled
+            ? '<span>🔊</span> Sound: ON'
+            : '<span>🔇</span> Sound: OFF';
+        }
+      },
+
+      startCountdownTicker() {
+        if (this.countdownIntervalId) clearInterval(this.countdownIntervalId);
+        this.countdownIntervalId = setInterval(() => {
+          const s = this.state.settings;
+          this.updateCreditsDisplay();
+
+          if (!document.getElementById('mum-settings-step').classList.contains('hidden')) {
+            this.syncMumSettingsUI();
+          }
+
+          const rem = this.getRemainingSeconds();
+
+          // Progressive low-time alerts for kids while timer is running
+          if (s.timerEndTimestamp && rem > 0) {
+            if (rem === 60 && this.lastTimerAlertMark !== 60) {
+              this.lastTimerAlertMark = 60;
+              SoundFX.timerWarning(false);
+              this.showToast('⏰ 1 minute left to play!', 'bg-amber-600');
+            } else if (rem === 30 && this.lastTimerAlertMark !== 30) {
+              this.lastTimerAlertMark = 30;
+              SoundFX.timerWarning(false);
+              this.showToast('⚠️ 30 seconds left! Finish your pair!', 'bg-orange-600');
+            } else if (rem <= 10 && rem >= 1 && this.lastTimerAlertMark !== rem) {
+              this.lastTimerAlertMark = rem;
+              SoundFX.timerWarning(true);
+              if (rem === 10) {
+                this.showToast('🚨 10 seconds left!', 'bg-rose-600');
+              }
+            }
+          }
+
+          // Lock screen & show final results automatically when countdown hits zero
+          if (s.timerEndTimestamp && rem <= 0) {
+            s.timerEndTimestamp = null;
+            s.timerRemainingSec = 0;
+            this.lastTimerAlertMark = null;
+            this.saveState();
+            const mumSettingsOpen = !document.getElementById('mum-settings-step').classList.contains('hidden');
+            if (mumSettingsOpen) {
+              this.clearPendingCardTimers();
+              if (this.state.game) this.state.game.isLocked = true;
+            } else {
+              this.showTimesUpScreen();
+            }
+          }
+        }, 400);
+      },
+
+      updateCreditsDisplay() {
+        const pill = document.getElementById('header-credits-pill');
+        const badge = document.getElementById('header-timer-badge');
+        if (!pill) return;
+
+        const remSec = this.getRemainingSeconds();
+        pill.textContent = `⏱️ Time Left: ${this.formatTime(remSec)}`;
+
+        if (badge) {
+          if (remSec > 0 && remSec <= 15) {
+            badge.className = 'cartoon-pill flex items-center gap-1.5 bg-rose-500 px-3.5 py-1 rounded-full animate-pulse transition-colors';
+            pill.className = 'text-xs font-black uppercase tracking-wider text-white';
+          } else if (remSec > 0 && remSec <= 60) {
+            badge.className = 'cartoon-pill flex items-center gap-1.5 bg-amber-300 px-3.5 py-1 rounded-full transition-colors';
+            pill.className = 'text-xs font-black uppercase tracking-wider text-[#1e1b4b]';
+          } else {
+            badge.className = 'cartoon-pill flex items-center gap-1.5 bg-white px-3.5 py-1 rounded-full transition-colors';
+            pill.className = 'text-xs font-black uppercase tracking-wider text-indigo-700';
+          }
+        }
+      },
+
+      toggleSound() {
+        this.state.settings.soundEnabled = !this.state.settings.soundEnabled;
+        SoundFX.enabled = this.state.settings.soundEnabled;
+        if (SoundFX.enabled) SoundFX.flip();
+        this.saveState();
+        this.syncMumSettingsUI();
+      },
+
+      resetLifetimeScores() {
+        SoundFX.flip();
+        this.state.players.boy.lifetimeScore = 0;
+        this.state.players.girl.lifetimeScore = 0;
+        this.saveState();
+        this.syncSetupUI();
+        this.showToast('⭐ Lifetime stars cleared!', 'bg-indigo-600');
+      },
+
+      changeMumPin() {
+        const newPinInput = document.getElementById('new-pin-input');
+        const val = newPinInput.value.trim();
+        if (!/^[a-zA-Z0-9]{2,20}$/.test(val)) {
+          this.showToast('Use 2–20 letters or numbers', 'bg-rose-600');
+          return;
+        }
+        this.state.settings.mumPin = val;
+        this.saveState();
+        newPinInput.value = '';
+        SoundFX.exactMatch();
+        this.showToast('✅ Passcode updated!', 'bg-emerald-600');
+      },
+
+      // ------------------------------------------------------------------------
+      // TOAST NOTIFICATIONS & CONFETTI CELEBRATION ENGINE
+      // ------------------------------------------------------------------------
+      showToast(message, bgClass = 'bg-slate-800') {
+        const container = document.getElementById('toast-container');
+        if (!container) return;
+        const toast = document.createElement('div');
+        toast.className = `${bgClass} text-white font-display font-bold text-xs sm:text-sm px-4 py-2 rounded-full border-3 border-[#1e1b4b] shadow-[0_4px_0_#1e1b4b] transition-all duration-300 transform scale-95 opacity-0`;
+        toast.textContent = message;
+        container.appendChild(toast);
+
+        requestAnimationFrame(() => {
+          toast.classList.remove('scale-95', 'opacity-0');
+          toast.classList.add('scale-100', 'opacity-100');
+        });
+
+        setTimeout(() => {
+          toast.classList.add('opacity-0', 'scale-90');
+          setTimeout(() => toast.remove(), 300);
+        }, 2100);
+      },
+
+      confettiParticles: [],
+      confettiRunning: false,
+
+      initConfettiCanvas() {
+        const canvas = document.getElementById('confetti-canvas');
+        if (!canvas) return;
+        const resize = () => {
+          canvas.width = window.innerWidth;
+          canvas.height = window.innerHeight;
+        };
+        resize();
+        window.addEventListener('resize', resize);
+      },
+
+      fireMiniConfetti() {
+        this.spawnConfetti(28);
+      },
+
+      fireBigConfetti() {
+        this.spawnConfetti(110);
+      },
+
+      spawnConfetti(amount) {
+        const colors = ['#38bdf8', '#f472b6', '#facc15', '#4ade80', '#a855f7', '#fb923c'];
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+
+        for (let i = 0; i < amount; i++) {
+          this.confettiParticles.push({
+            x: w * 0.5 + (Math.random() - 0.5) * (w * 0.6),
+            y: h * 0.45,
+            vx: (Math.random() - 0.5) * 12,
+            vy: -Math.random() * 11 - 4,
+            size: Math.random() * 8 + 6,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            rotation: Math.random() * 360,
+            vRot: (Math.random() - 0.5) * 14,
+            life: 1
+          });
+        }
+
+        if (!this.confettiRunning) {
+          this.confettiRunning = true;
+          this.animateConfetti();
+        }
+      },
+
+      animateConfetti() {
+        const canvas = document.getElementById('confetti-canvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        this.confettiParticles.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.35; // gravity
+          p.rotation += p.vRot;
+          p.life -= 0.014;
+
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate((p.rotation * Math.PI) / 180);
+          ctx.globalAlpha = Math.max(0, p.life);
+          ctx.fillStyle = p.color;
+          ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.65);
+          ctx.restore();
+        });
+
+        this.confettiParticles = this.confettiParticles.filter(p => p.life > 0 && p.y < canvas.height + 30);
+
+        if (this.confettiParticles.length > 0) {
+          requestAnimationFrame(() => this.animateConfetti());
+        } else {
+          this.confettiRunning = false;
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+      }
+    };
+
+    // Start the app cleanly after DOM load
+    window.addEventListener('DOMContentLoaded', () => App.init());
+  </script>
+</body>
+</html>
